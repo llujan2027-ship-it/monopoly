@@ -1,0 +1,29 @@
+Property Name,Set,Cost,Base rent,1 house,2 house,3 house,4 house,Hotel,House cost,Mortgage value
+Mediterranean Avenue,Brown,60,2,10,30,90,160,250,50,30
+Baltic Avenue,Brown,60,4,20,60,180,320,450,50,30
+Oriental Avenue,Light Blue,100,6,30,90,270,400,550,50,50
+Vermont Avenue,Light Blue,100,6,30,90,270,400,550,50,50
+Connecticut Avenue,Light Blue,120,8,40,100,300,450,600,50,60
+St. Charles Place,Pink,140,10,50,150,450,625,750,100,70
+States Avenue,Pink,140,10,50,150,450,625,750,100,70
+Virginia Avenue,Pink,160,12,60,180,500,700,900,100,80
+St. James Place,Orange,180,14,70,200,550,750,950,100,90
+Tennessee Avenue,Orange,180,14,70,200,550,750,950,100,90
+New York Avenue,Orange,200,16,80,220,600,800,1000,100,100
+Kentucky Avenue,Red,220,18,90,250,700,875,1050,150,110
+Indiana Avenue,Red,220,18,90,250,700,875,1050,150,110
+Illinois Avenue,Red,240,20,100,300,750,925,1100,150,120
+Atlantic Avenue,Yellow,260,22,110,330,800,975,1150,150,130
+Ventnor Avenue,Yellow,260,22,110,330,800,975,1150,150,130
+Marvin Gardens,Yellow,280,24,120,360,850,1025,1200,150,140
+Pacific Avenue,Green,300,26,130,390,900,1100,1275,200,150
+North Carolina Avenue,Green,300,26,130,390,900,1100,1275,200,150
+Pennsylvania Avenue,Green,320,28,150,450,1000,1200,1400,200,160
+Park Place,Dark Blue,350,35,175,500,1100,1300,1500,200,175
+Boardwalk,Dark Blue,400,50,200,600,1400,1700,2000,200,200
+Reading Railroad,Railroad,200,25,0,0,0,0,0,0,100
+Pennsylvania Railroad,Railroad,200,25,0,0,0,0,0,0,100
+B. & O. Railroad,Railroad,200,25,0,0,0,0,0,0,100
+Short Line,Railroad,200,25,0,0,0,0,0,0,100
+Electric Company,Utility,150,0,0,0,0,0,0,0,75
+Water Works,Utility,150,0,0,0,0,0,0,0,75
