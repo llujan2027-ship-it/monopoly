@@ -1,31 +1,16 @@
 Card flavor text,Cash change,Add. effect
-"You set aside time every week to hang out with your elderly neighbor - you've heard some amazing stories!
-COLLECT $100.",100,none
-"You organize a group to clean up your town's footpaths.
-COLLECT $50.",50,none
-"You buy a few bags of cookies from that school bake sale. Yum!
-PAY $50.",-50,none
-"You rescue a puppy – and you feel rescued, too!
-GET OUT OF JAIL FREE.",0,JailFree
-"You organize a street party so people on your road can get to know each other.
-COLLECT $10 FROM EACH PLAYER.",10,PerPlayer
-"Blasting music late at night? Your neighbors do not approve.
-GO TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.",0,Jail
-"You help your neighbor bring in her groceries. She makes you lunch to say thanks!
-COLLECT $20.",20,none
-"You help build a new school playground – then you get to test the slide!
-COLLECT $100.",100,none
-"You spend the day playing games with kids at a local children’s hospital.
-COLLECT $100.",100,none
-"You go to the local school’s car wash fundraiser – but you forget to close your windows!
-PAY $100.",-100,none
-"Just when you think you can’t go another step, you finish that foot race – and raise money for your local hospital!
-ADVANCE TO GO. COLLECT $200.",0,GO
-"You help your neighbors clean up their Gardens after a big storm.
-COLLECT $200.",200,none
-"Your fuzzy friends at the animal shelter will be thankful for your donation.
-PAY $50.",-50,none
-"You should have volunteered for that home improvement project – you would have learned valuable skills!
-FOR EACH HOUSE YOU OWN, PAY $40. FOR EACH HOTEL YOU OWN, PAY $115.",0,Repairs
-"You organize a bake sale for your local school.
-COLLECT $25.",25,none
+You set aside time every week to hang out with your elderly neighbor - you've heard some amazing stories! COLLECT $100.,100,none
+You organize a group to clean up your town's footpaths. COLLECT $50.,50,none
+You buy a few bags of cookies from that school bake sale. Yum! PAY $50.,-50,none
+You rescue a puppy - and you feel rescued too! GET OUT OF JAIL FREE.,0,JailFree
+You organize a street party so people on your road can get to know each other. COLLECT $10 FROM EACH PLAYER.,10,PerPlayer
+Blasting music late at night? Your neighbors do not approve. GO TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.,0,Jail
+You help your neighbor bring in her groceries. She makes you lunch to say thanks! COLLECT $20.,20,none
+You help build a new school playground - then you get to test the slide! COLLECT $100.,100,none
+You spend the day playing games with kids at a local children's hospital. COLLECT $100.,100,none
+You go to the local school's car wash fundraiser - but you forget to close your windows! PAY $100.,-100,none
+Just when you think you can't go another step - you finish that foot race - and raise money for your local hospital! ADVANCE TO GO. COLLECT $200.,0,GO
+You help your neighbors clean up their Gardens after a big storm. COLLECT $200.,200,none
+Your fuzzy friends at the animal shelter will be thankful for your donation. PAY $50.,-50,none
+You should have volunteered for that home improvement project - you would have learned valuable skills! FOR EACH HOUSE YOU OWN PAY $40. FOR EACH HOTEL YOU OWN PAY $115.,0,Repairs
+You organize a bake sale for your local school. COLLECT $25.,25,none
