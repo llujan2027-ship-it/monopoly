@@ -88,7 +88,15 @@ public class Monopoly {
         }
         Collections.shuffle(chestDeck);
         Collections.shuffle(chanceDeck);
+        Player player1 = new Player("test", false, true, 1);
+        Player player2 = new Player("test", false, true, 2);
+        Player player3 = new Player("test", false, true, 3);
+        Player player4 = new Player("test", false, true, 4);
     }
+}
+
+class Game {
+    
 }
 
 class Player {
@@ -115,8 +123,8 @@ class Player {
     
     public void playerTurn(){
         System.out.println(this.getName() + "'s Turn!");
-        //if(this.)
-        //- IF NOT -
+        if(this.getJailed() == 0){
+        //- IF TRUE -
         // Wait for player prompt
         // Roll dice
         // Check space
@@ -126,7 +134,9 @@ class Player {
         //   Subtract cash from player, add property to playerProps
         //   Original property has owned set to true, and whoOwns set to playerNumber
         //  - IF NOT BOUGHT -
-        //   
+        }else{
+         this.rollJail();
+        }
     }
     
     public void roll(){
@@ -162,6 +172,13 @@ class Player {
     }
     
     public void rollJail(){
+        
+        if(this.checkJailFree()){
+            //Ask to use JailFree
+        }else if(this.getCash() > 50){
+            //Ask to pay $50
+        }
+        
         Die d1 = new Die();
         Die d2 = new Die();
         int d1Roll = d1.roll();
@@ -171,10 +188,6 @@ class Player {
             
         } else if(this.getJailed() > 1){
             this.setJailed(playerJailed - 1);
-        } else {
-            if(this.checkJailFree()){
-                //Ask to use JailFree
-            }
         }
         if(this.getJailed() == 0){
             int total = d1Roll + d2Roll;
@@ -515,12 +528,29 @@ class CommunityChest{
         switch(this.getEffect()){
             case "none" -> {
                 player.changeCash(this.getCashDiff());
+                System.out.println("Total cash: $"+player.getCash());
             }
             case "JailFree" -> {
                 player.setJailFree(true);
             }
             case "PerPlayer" -> {
-                //TODO
+                int othersPay = -this.getCashDiff();
+                for(int i = 1; i <= 4; i++){
+                    switch(i){
+                        case 1 -> {
+                            
+                        }
+                        case 2 -> {
+                            
+                        }
+                        case 3 -> {
+                            
+                        }
+                        case 4 -> {
+                            
+                        }
+                    }
+                }
             }
             case "Repairs" ->{
                 ArrayList<Property> tempArray = player.getProps();
@@ -538,6 +568,8 @@ class CommunityChest{
                 totalHotels = totalHotels * 100;
                 doshLost = doshLost - (totalHouses + totalHotels);
                 player.changeCash(doshLost);
+                System.out.println("You paid: $" + doshLost + "!"
+                        + "\nTotal cash: $" + player.getCash());
             }
             case "Jail" -> {
                 player.setSpace(10);
@@ -546,6 +578,7 @@ class CommunityChest{
             case "GO" -> {
                 player.setSpace(0);
                 player.changeCash(200);
+                System.out.println("Total cash: $"+player.getCash());
             }
         }
     }
@@ -579,6 +612,7 @@ class Chance{
         switch(this.getEffect()){
             case "none" -> {
                 player.changeCash(this.getCashDiff());
+                System.out.println("Total cash: $"+player.getCash());
             }
             case "JailFree" -> {
                 player.setJailFree(true);
@@ -602,6 +636,8 @@ class Chance{
                 totalHotels = totalHotels * 100;
                 doshLost = doshLost - (totalHouses + totalHotels);
                 player.changeCash(doshLost);
+                System.out.println("You paid: $" + doshLost + "!"
+                        + "\nTotal cash: $" + player.getCash());
             }
             case "Jail" -> {
                 player.setSpace(10);
@@ -610,6 +646,7 @@ class Chance{
             case "GO" -> {
                 player.setSpace(0);
                 player.changeCash(200);
+                System.out.println("Total cash: $"+player.getCash());
             }
             case "Boardwalk" -> {
                 while(player. getSpace() != 39){
@@ -640,27 +677,59 @@ class Chance{
                     }
                 }
             }
-            /*case "Railroad" -> {
-                for(int i = 0; i < 39; i++){
-                    if(player.getSpace() == 39){
-                        player.setSpace(0);
-                        player.changeCash(200);
-                        System.out.println("You passed Go! Collect $200.\nTotal cash: $"+player.getCash());
-                    }else if(player.getSpace() < 39){
-                        player.setSpace(player.getSpace() + 1);
+            case "Railroad" -> {
+                boolean railCheck = true;
+                do {
+                    switch (player.getSpace()) {
+                        case 5 -> {
+                            System.out.println("You landed on: Reading Railroad!");
+                            railCheck = false;
+                        }
+                        case 15 -> {
+                            System.out.println("You landed on: Pennsylvania Railroad!");
+                            railCheck = false;
+                        }
+                        case 25 -> {
+                            System.out.println("You landed on: B. & O. Railroad!");
+                            railCheck = false;
+                        }
+                        case 35 -> {
+                            System.out.println("You landed on: Short Line!");
+                            railCheck = false;
+                        }
+                        case 39 -> {
+                            player.setSpace(0);
+                            player.changeCash(200);
+                            System.out.println("You passed Go! Collect $200.\nTotal cash: $"+player.getCash());
+                        }
+                        default -> {
+                            player.setSpace(player.getSpace() + 1);
+                        }
                     }
-                }
-            }*/
+                }while(railCheck == true);
+            }
             case "Utility" -> {
-                for(int i = 0; i < 39; i++){
-                    if(player.getSpace() == 39){
-                        player.setSpace(0);
-                        player.changeCash(200);
-                        System.out.println("You passed Go! Collect $200.\nTotal cash: $"+player.getCash());
-                    }else if(player.getSpace() < 39){
-                        player.setSpace(player.getSpace() + 1);
+                boolean utilCheck = true;
+                do {
+                    switch (player.getSpace()) {
+                        case 12 -> {
+                            System.out.println("You landed on: Electric Company!");
+                            utilCheck = false;
+                        }
+                        case 28 -> {
+                            System.out.println("You landed on: Water Works!");
+                            utilCheck = false;
+                        }
+                        case 39 -> {
+                            player.setSpace(0);
+                            player.changeCash(200);
+                            System.out.println("You passed Go! Collect $200.\nTotal cash: $"+player.getCash());
+                        }
+                        default -> {
+                            player.setSpace(player.getSpace() + 1);
+                        }
                     }
-                }
+                }while(utilCheck == true);
             }
             case "Back3" -> {
                 for(int i = 0; i < 3; i++){
@@ -700,7 +769,7 @@ TODO:
  - CC class
  - Add/Sub properties
  - All Property methods
- - Game loop
+ - Game class
  - Add players
  - Computer implementation if time
 */
