@@ -96,7 +96,34 @@ public class Monopoly {
 }
 
 class Game {
+    Player player1;
+    Player player2;
+    Player player3;
+    Player player4;
     
+    public Game(Player p1, Player p2, Player p3, Player p4){
+        this.player1 = p1;
+        this.player2 = p2;
+        this.player3 = p3;
+        this.player4 = p4;
+    }
+    /*public void playerTurn(){
+        System.out.println(this.getName() + "'s Turn!");
+        if(this.getJailed() == 0){
+        //- IF TRUE -
+        // Wait for player prompt
+        // Roll dice
+        // Check space
+        //  - UNOWNED PROPERTY -
+        //   Ask player to buy
+        //  - IF BOUGHT -
+        //   Subtract cash from player, add property to playerProps
+        //   Original property has owned set to true, and whoOwns set to playerNumber
+        //  - IF NOT BOUGHT -
+        }else{
+         this.rollJail();
+        }
+    }*/
 }
 
 class Player {
@@ -121,23 +148,7 @@ class Player {
         this.playerNumber = number;
     }
     
-    public void playerTurn(){
-        System.out.println(this.getName() + "'s Turn!");
-        if(this.getJailed() == 0){
-        //- IF TRUE -
-        // Wait for player prompt
-        // Roll dice
-        // Check space
-        //  - UNOWNED PROPERTY -
-        //   Ask player to buy
-        //  - IF BOUGHT -
-        //   Subtract cash from player, add property to playerProps
-        //   Original property has owned set to true, and whoOwns set to playerNumber
-        //  - IF NOT BOUGHT -
-        }else{
-         this.rollJail();
-        }
-    }
+    
     
     public void roll(){
         Die d1 = new Die();
