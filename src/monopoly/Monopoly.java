@@ -16,6 +16,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.Arrays;
+import java.util.Collections;
 public class Monopoly {
 
     /**
@@ -32,6 +33,10 @@ public class Monopoly {
         Scanner scan = new Scanner(System.in);
         //Where all contacts are kept
         ArrayList<Property> propertyList = new ArrayList<>();
+        ArrayList<CommunityChest> chestDeck = new ArrayList<>();
+        ArrayList<Chance> chanceDeck = new ArrayList<>();
+        ArrayList<Player> playerList = new ArrayList<>();
+        int PlayersActive = 0;
         
         try (BufferedReader reader = new BufferedReader(new FileReader(propertiesPath))) {
             String line;
@@ -49,6 +54,40 @@ public class Monopoly {
             System.err.println("An error occurred while reading from the file: "
             + e.getMessage());
         }
+        try (BufferedReader reader = new BufferedReader(new FileReader(chestPath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                //Create a contact
+                    Object[] tempArray = line.split(",");
+                if(!tempArray[0].equals("Card flavor text")){
+                    ArrayList<Object> toCard = new ArrayList<>(Arrays.asList(tempArray));
+                    CommunityChest card = new CommunityChest(toCard);
+                    //Add to list
+                    chestDeck.add(card);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading from the file: "
+            + e.getMessage());
+        }
+        try (BufferedReader reader = new BufferedReader(new FileReader(chancePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                //Create a contact
+                    Object[] tempArray = line.split(",");
+                if(!tempArray[0].equals("Card flavor text")){
+                    ArrayList<Object> toCard = new ArrayList<>(Arrays.asList(tempArray));
+                    Chance card = new Chance(toCard);
+                    //Add to list
+                    chanceDeck.add(card);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading from the file: "
+            + e.getMessage());
+        }
+        Collections.shuffle(chestDeck);
+        Collections.shuffle(chanceDeck);
     }
 }
 
@@ -105,17 +144,18 @@ class Player {
                 doublesCounter++;
             }
             if(doublesCounter < 3){
-                for(int i = 0; i < total; i++){
+                for(int i = 0; i < 39; i++){
                     if(this.getSpace() == 39){
-                        this.currentSpace = 0;
-                        this.playerCash = this.playerCash + 200;
-                        System.out.println("You passed Go! Collect $200.\nTotal cash: $"+this.getCash());
+                        this.setSpace(0);
+                        this.changeCash(200);
+                        System.out.println("You passed Go! Collect $200."
+                                + "\nTotal cash: $"+this.getCash());
                     }else if(this.getSpace() < 39){
-                        this.currentSpace++;
+                        this.setSpace(this.getSpace() + 1);
                     }
                 }
             }else if(doublesCounter == 3){
-                this.playerJailed = 3;
+                this.setJailed(3);
             }
         }while(doublesTrue == true);
         
@@ -127,10 +167,10 @@ class Player {
         int d1Roll = d1.roll();
         int d2Roll = d2.roll();
         if(d1Roll == d2Roll){
-            this.playerJailed = 0;
+            this.setJailed(0);
             
         } else if(this.getJailed() > 1){
-            playerJailed--;
+            this.setJailed(playerJailed - 1);
         } else {
             if(this.checkJailFree()){
                 //Ask to use JailFree
@@ -138,14 +178,16 @@ class Player {
         }
         if(this.getJailed() == 0){
             int total = d1Roll + d2Roll;
-            for(int i = 0; i < total; i++){
-                if(this.getSpace() == 39){
-                    this.currentSpace = 0;
-                    this.playerCash = this.playerCash + 200;
-                }else if(this.getSpace() < 39){
-                    this.currentSpace++;
+            for(int i = 0; i < 39; i++){
+                    if(this.getSpace() == 39){
+                        this.setSpace(0);
+                        this.changeCash(200);
+                        System.out.println("You passed Go! Collect $200."
+                                + "\nTotal cash: $"+this.getCash());
+                    }else if(this.getSpace() < 39){
+                        this.setSpace(this.getSpace() + 1);
+                    }
                 }
-            }
         }
     }
     
@@ -185,8 +227,15 @@ class Player {
         return this.playerProps;
     }
     
-    public void setName(String name){
-        this.playerName = name;
+    public void setSpace(int space){
+        this.currentSpace = space;
+    }
+    public void setJailed(int turns){
+        this.playerJailed = turns;
+    }
+    
+    public void setJailFree(boolean TOrF){
+        this.jailFree = TOrF;
     }
     
     public void changeCash(int cash){
@@ -455,8 +504,46 @@ class CommunityChest{
     int cashChange;
     String effect;
     
-    public CommunityChest(){
-        
+    public CommunityChest(ArrayList<Object> toCard){
+        this.cardText = toCard.get(0).toString();
+        this.cashChange = Integer.parseInt(toCard.get(1).toString());
+        this.effect = toCard.get(2).toString();
+    }
+    
+    public void playCard(Player player){
+        System.out.println(this.getText());
+        switch(this.getEffect()){
+            case "none" -> {
+                player.changeCash(this.getCashDiff());
+            }
+            case "JailFree" -> {
+                player.setJailFree(true);
+            }
+            case "PerPlayer" -> {
+                
+            }
+            case "Repairs" ->{
+                
+            }
+            case "Jail" -> {
+                
+            }
+            case "GO" -> {
+                
+            }
+        }
+    }
+    
+    public String getText(){
+      return this.cardText;  
+    }
+    
+    public int getCashDiff(){
+        return this.cashChange;
+    }
+    
+    public String getEffect(){
+        return this.effect;
     }
 }
 
@@ -465,8 +552,129 @@ class Chance{
     int cashChange;
     String effect;
     
-    public Chance(){
-        
+    public Chance(ArrayList<Object> toCard){
+        this.cardText = toCard.get(0).toString();
+        this.cashChange = Integer.parseInt(toCard.get(1).toString());
+        this.effect = toCard.get(2).toString();
+    }
+    
+    public void playCard(Player player){
+        System.out.println(this.getText());
+        switch(this.getEffect()){
+            case "none" -> {
+                player.changeCash(this.getCashDiff());
+            }
+            case "JailFree" -> {
+                player.setJailFree(true);
+            }
+            case "PerPlayer" -> {
+                
+            }
+            case "Repairs" ->{
+                ArrayList<Property> tempArray = player.getProps();
+                int totalHouses = 0;
+                int totalHotels = 0;
+                int doshLost = 0;
+                for(int i = 0; i < tempArray.size(); i++){
+                    if(tempArray.get(i).getBuildings() < 5){
+                        totalHouses = totalHouses + tempArray.get(i).getBuildings();
+                    }else if(tempArray.get(i).getBuildings() == 5){
+                        totalHotels = totalHotels + 1;
+                    }
+                }
+                totalHouses = totalHouses * 25;
+                totalHotels = totalHotels * 100;
+                doshLost = doshLost - (totalHouses + totalHotels);
+                player.changeCash(doshLost);
+            }
+            case "Jail" -> {
+                player.setSpace(10);
+                player.setJailed(3);
+            }
+            case "GO" -> {
+                player.setSpace(0);
+                player.changeCash(200);
+            }
+            case "Boardwalk" -> {
+                while(player. getSpace() != 39){
+                    if(player.getSpace() < 39){
+                        player.setSpace(player.getSpace() + 1);
+                    }
+                }
+            }
+            case "IllinoisAve" -> {
+                while(player. getSpace() != 24){
+                    if(player.getSpace() == 39){
+                        player.setSpace(0);
+                        player.changeCash(200);
+                        System.out.println("You passed Go! Collect $200.\nTotal cash: $"+player.getCash());
+                    }else if(player.getSpace() < 39){
+                        player.setSpace(player.getSpace() + 1);
+                    }
+                }
+            }
+            case "StCharlesPlace" -> {
+                while(player. getSpace() != 11){
+                    if(player.getSpace() == 39){
+                        player.setSpace(0);
+                        player.changeCash(200);
+                        System.out.println("You passed Go! Collect $200.\nTotal cash: $"+player.getCash());
+                    }else if(player.getSpace() < 39){
+                        player.setSpace(player.getSpace() + 1);
+                    }
+                }
+            }
+            case "Railroad" -> {
+                for(int i = 0; i < 39; i++){
+                    if(player.getSpace() == 39){
+                        player.setSpace(0);
+                        player.changeCash(200);
+                        System.out.println("You passed Go! Collect $200.\nTotal cash: $"+player.getCash());
+                    }else if(player.getSpace() < 39){
+                        player.setSpace(player.getSpace() + 1);
+                    }
+                }
+            }
+            case "Utility" -> {
+                for(int i = 0; i < 39; i++){
+                    if(player.getSpace() == 39){
+                        player.setSpace(0);
+                        player.changeCash(200);
+                        System.out.println("You passed Go! Collect $200.\nTotal cash: $"+player.getCash());
+                    }else if(player.getSpace() < 39){
+                        player.setSpace(player.getSpace() + 1);
+                    }
+                }
+            }
+            case "Back3" -> {
+                for(int i = 0; i < 3; i++){
+                    player.setSpace(player.getSpace() - 1);
+                }
+            }
+            case "ReadRailroad" -> {
+                while(player. getSpace() != 5){
+                    if(player.getSpace() == 39){
+                        player.setSpace(0);
+                        player.changeCash(200);
+                        System.out.println("You passed Go! Collect $200.\nTotal cash: $"+player.getCash());
+                    }else if(player.getSpace() < 39){
+                        player.setSpace(player.getSpace() + 1);
+                    }
+                }
+            }
+        }
+    }
+    
+    public String getText(){
+      return this.cardText;  
+    }
+    
+    public int getCashDiff(){
+        return this.cashChange;
+    }
+    
+    public String getEffect(){
+        return this.effect;
     }
 }
 
