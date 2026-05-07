@@ -520,16 +520,32 @@ class CommunityChest{
                 player.setJailFree(true);
             }
             case "PerPlayer" -> {
-                
+                //TODO
             }
             case "Repairs" ->{
-                
+                ArrayList<Property> tempArray = player.getProps();
+                int totalHouses = 0;
+                int totalHotels = 0;
+                int doshLost = 0;
+                for(int i = 0; i < tempArray.size(); i++){
+                    if(tempArray.get(i).getBuildings() < 5){
+                        totalHouses = totalHouses + tempArray.get(i).getBuildings();
+                    }else if(tempArray.get(i).getBuildings() == 5){
+                        totalHotels = totalHotels + 1;
+                    }
+                }
+                totalHouses = totalHouses * 25;
+                totalHotels = totalHotels * 100;
+                doshLost = doshLost - (totalHouses + totalHotels);
+                player.changeCash(doshLost);
             }
             case "Jail" -> {
-                
+                player.setSpace(10);
+                player.setJailed(3);
             }
             case "GO" -> {
-                
+                player.setSpace(0);
+                player.changeCash(200);
             }
         }
     }
@@ -568,7 +584,7 @@ class Chance{
                 player.setJailFree(true);
             }
             case "PerPlayer" -> {
-                
+                //TODO
             }
             case "Repairs" ->{
                 ArrayList<Property> tempArray = player.getProps();
@@ -624,7 +640,7 @@ class Chance{
                     }
                 }
             }
-            case "Railroad" -> {
+            /*case "Railroad" -> {
                 for(int i = 0; i < 39; i++){
                     if(player.getSpace() == 39){
                         player.setSpace(0);
@@ -634,7 +650,7 @@ class Chance{
                         player.setSpace(player.getSpace() + 1);
                     }
                 }
-            }
+            }*/
             case "Utility" -> {
                 for(int i = 0; i < 39; i++){
                     if(player.getSpace() == 39){
