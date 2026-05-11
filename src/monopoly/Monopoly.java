@@ -18,76 +18,12 @@ import java.util.Scanner;
 import java.util.Arrays;
 import java.util.Collections;
 public class Monopoly {
-
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //sets the file path
-        String propertiesPath = "Decks/Properties.csv";
-        String chestPath = "Decks/CommunityChest.csv";
-        String chancePath = "Decks/Chance.csv";
-        //keeps the program running
-        boolean run = true;
         //Scanner
         Scanner scan = new Scanner(System.in);
-        //Where all contacts are kept
-        ArrayList<Property> propertyList = new ArrayList<>();
-        ArrayList<CommunityChest> chestDeck = new ArrayList<>();
-        ArrayList<Chance> chanceDeck = new ArrayList<>();
-        ArrayList<Player> playerList = new ArrayList<>();
-        int PlayersActive = 0;
-        
-        try (BufferedReader reader = new BufferedReader(new FileReader(propertiesPath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                //Create a contact
-                    Object[] tempArray = line.split(",");
-                if(!tempArray[0].equals("Property Name")){
-                    ArrayList<Object> toProp = new ArrayList<>(Arrays.asList(tempArray));
-                    Property prop = new Property(toProp);
-                    //Add to list
-                    propertyList.add(prop);
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("An error occurred while reading from the file: "
-            + e.getMessage());
-        }
-        try (BufferedReader reader = new BufferedReader(new FileReader(chestPath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                //Create a contact
-                    Object[] tempArray = line.split(",");
-                if(!tempArray[0].equals("Card flavor text")){
-                    ArrayList<Object> toCard = new ArrayList<>(Arrays.asList(tempArray));
-                    CommunityChest card = new CommunityChest(toCard);
-                    //Add to list
-                    chestDeck.add(card);
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("An error occurred while reading from the file: "
-            + e.getMessage());
-        }
-        try (BufferedReader reader = new BufferedReader(new FileReader(chancePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                //Create a contact
-                    Object[] tempArray = line.split(",");
-                if(!tempArray[0].equals("Card flavor text")){
-                    ArrayList<Object> toCard = new ArrayList<>(Arrays.asList(tempArray));
-                    Chance card = new Chance(toCard);
-                    //Add to list
-                    chanceDeck.add(card);
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("An error occurred while reading from the file: "
-            + e.getMessage());
-        }
-        Collections.shuffle(chestDeck);
-        Collections.shuffle(chanceDeck);
         Player player1 = new Player("test", false, true, 1);
         Player player2 = new Player("test", false, true, 2);
         Player player3 = new Player("test", false, true, 3);
@@ -96,34 +32,238 @@ public class Monopoly {
 }
 
 class Game {
-    Player player1;
-    Player player2;
-    Player player3;
-    Player player4;
-    
+        Player player1;
+        Player player2;
+        Player player3;
+        Player player4;
+        ArrayList<Property> propertyList = new ArrayList<>();
+        ArrayList<CommunityChest> chestDeck = new ArrayList<>();
+        ArrayList<Chance> chanceDeck = new ArrayList<>();
+        ArrayList<Player> playerList = new ArrayList<>();
+        int PlayersActive = 0;
+        String propertiesPath = "Decks/Properties.csv";
+        String chestPath = "Decks/CommunityChest.csv";
+        String chancePath = "Decks/Chance.csv";
+        //keeps the program running
+        boolean run = true;
+        //Where all contacts are kept
+        
     public Game(Player p1, Player p2, Player p3, Player p4){
+        //sets the file path
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.propertiesPath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                //Create a contact
+                    Object[] tempArray = line.split(",");
+                if(!tempArray[0].equals("Property Name")){
+                    ArrayList<Object> toProp = new ArrayList<>(Arrays.asList(tempArray));
+                    Property prop = new Property(toProp);
+                    //Add to list
+                    this.propertyList.add(prop);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading from the file: "
+            + e.getMessage());
+        }
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.chestPath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                //Create a contact
+                    Object[] tempArray = line.split(",");
+                if(!tempArray[0].equals("Card flavor text")){
+                    ArrayList<Object> toCard = new ArrayList<>(Arrays.asList(tempArray));
+                    CommunityChest card = new CommunityChest(toCard);
+                    //Add to list
+                    this.chestDeck.add(card);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading from the file: "
+            + e.getMessage());
+        }
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.chancePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                //Create a contact
+                    Object[] tempArray = line.split(",");
+                if(!tempArray[0].equals("Card flavor text")){
+                    ArrayList<Object> toCard = new ArrayList<>(Arrays.asList(tempArray));
+                    Chance card = new Chance(toCard);
+                    //Add to list
+                    this.chanceDeck.add(card);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading from the file: "
+            + e.getMessage());
+        }
+        Collections.shuffle(this.chestDeck);
+        Collections.shuffle(this.chanceDeck);
         this.player1 = p1;
+        playerList.add(player1);
         this.player2 = p2;
+        playerList.add(player2);
         this.player3 = p3;
+        playerList.add(player3);
         this.player4 = p4;
+        playerList.add(player4);
     }
-    /*public void playerTurn(){
-        System.out.println(this.getName() + "'s Turn!");
-        if(this.getJailed() == 0){
-        //- IF TRUE -
-        // Wait for player prompt
-        // Roll dice
-        // Check space
+    
+    public void run(){
+        
+    }
+    
+    public void playerTurn(Player player){
+        System.out.println(player.getName() + "'s Turn!");
+        if(player.getJailed() == 0){
+            player.roll();
+            checkSpace(player);
+        }else{
+         player.rollJail();
+        }
+    }
+    
+    public void checkSpace(Player player){
+        int playerSpace = player.getSpace();
+        switch(playerSpace){
+            case 0 ->{
+                System.out.println("You landed on: GO! Enjoy your $200!");
+            }
+            case 1 ->{
+                System.out.println("You landed on: Mediterranean Avenue!");
+                if(!this.propertyList.get(0).checkOwned()){
+                    
+                }else if(this.propertyList.get(0).getWhoOwns() == player.getNumber()){ 
+                    if(this.propertyList.get(0).checkSet()){
+                        
+                    }
+                }else{
+                    
+                }
+            }
+            case 2 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 3 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 4 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 5 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 6 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 7 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 8 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 9 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 10 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 11 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 12 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 13 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 14 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 15 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 16 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 17 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 18 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 19 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 20 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 21 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 22 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 23 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 24 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 25 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 26 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 27 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 28 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 29 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 30 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 31 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 32 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 33 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 34 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 35 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 36 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 37 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 38 ->{
+                System.out.println("You landed on: GO!");
+            }
+            case 39 ->{
+                System.out.println("You landed on: GO!");
+            }
+        }
         //  - UNOWNED PROPERTY -
         //   Ask player to buy
         //  - IF BOUGHT -
         //   Subtract cash from player, add property to playerProps
         //   Original property has owned set to true, and whoOwns set to playerNumber
         //  - IF NOT BOUGHT -
-        }else{
-         this.rollJail();
-        }
-    }*/
+    }
 }
 
 class Player {
@@ -148,70 +288,81 @@ class Player {
         this.playerNumber = number;
     }
     
-    
+    //Scanner
+    Scanner scan = new Scanner(System.in);
     
     public void roll(){
-        Die d1 = new Die();
-        Die d2 = new Die();
-        boolean doublesTrue = false;
-        int doublesCounter = 0;
-        do{
-            
-            int d1Roll = d1.roll();
-            int d2Roll = d2.roll();
-            int total = d1Roll + d2Roll;
-            doublesTrue = (d1Roll == d2Roll);
-            if(doublesTrue == true){
-                doublesCounter++;
-            }
-            if(doublesCounter < 3){
-                for(int i = 0; i < 39; i++){
-                    if(this.getSpace() == 39){
-                        this.setSpace(0);
-                        this.changeCash(200);
-                        System.out.println("You passed Go! Collect $200."
-                                + "\nTotal cash: $"+this.getCash());
-                    }else if(this.getSpace() < 39){
-                        this.setSpace(this.getSpace() + 1);
-                    }
+        System.out.println("Input 'y' to roll dice when ready!");
+        if(scan.next().equals("y")){
+            Die d1 = new Die();
+            Die d2 = new Die();
+            boolean doublesTrue = false;
+            int doublesCounter = 0;
+            do{
+
+                int d1Roll = d1.roll();
+                int d2Roll = d2.roll();
+                int total = d1Roll + d2Roll;
+                doublesTrue = (d1Roll == d2Roll);
+                if(doublesTrue == true){
+                    doublesCounter++;
                 }
-            }else if(doublesCounter == 3){
-                this.setJailed(3);
-            }
-        }while(doublesTrue == true);
-        
+                if(doublesCounter < 3){
+                    for(int i = 0; i < 39; i++){
+                        if(this.getSpace() == 39){
+                            this.setSpace(0);
+                            this.changeCash(200);
+                            System.out.println("""
+                                               You passed Go! Collect $200.
+                                               Total cash: $"""+this.getCash());
+                        }else if(this.getSpace() < 39){
+                            this.setSpace(this.getSpace() + 1);
+                        }
+                    }
+                }else if(doublesCounter == 3){
+                    this.setJailed(3);
+                }
+            }while(doublesTrue == true);
+        }
     }
     
     public void rollJail(){
-        
         if(this.checkJailFree()){
             //Ask to use JailFree
         }else if(this.getCash() > 50){
             //Ask to pay $50
         }
         
-        Die d1 = new Die();
-        Die d2 = new Die();
-        int d1Roll = d1.roll();
-        int d2Roll = d2.roll();
-        if(d1Roll == d2Roll){
-            this.setJailed(0);
-            
-        } else if(this.getJailed() > 1){
-            this.setJailed(playerJailed - 1);
-        }
-        if(this.getJailed() == 0){
-            int total = d1Roll + d2Roll;
-            for(int i = 0; i < 39; i++){
+        
+        System.out.println("""
+                           You are jailed. 
+                           Input 'y' to roll dice when ready!""");
+        if(scan.next().equals("y")){
+
+            Die d1 = new Die();
+            Die d2 = new Die();
+            int d1Roll = d1.roll();
+            int d2Roll = d2.roll();
+            if(d1Roll == d2Roll){
+                this.setJailed(0);
+
+            } else if(this.getJailed() > 1){
+                this.setJailed(playerJailed - 1);
+            }
+            if(this.getJailed() == 0){
+                int total = d1Roll + d2Roll;
+                for(int i = 0; i < 39; i++){
                     if(this.getSpace() == 39){
                         this.setSpace(0);
                         this.changeCash(200);
-                        System.out.println("You passed Go! Collect $200."
-                                + "\nTotal cash: $"+this.getCash());
+                        System.out.println("""
+                                           You passed Go! Collect $200.
+                                           Total cash: $"""+this.getCash());
                     }else if(this.getSpace() < 39){
                         this.setSpace(this.getSpace() + 1);
                     }
                 }
+            }
         }
     }
     
@@ -290,6 +441,7 @@ class Property {
     int mortgageValue;
     boolean owned;
     int whoOwns;
+    boolean completeSet;
     
     public Property(ArrayList<Object> toProp){
         this.propertyName = toProp.get(0).toString();
@@ -308,6 +460,7 @@ class Property {
         this.mortgaged = false;
         this.owned = false;
         this.whoOwns = 0;
+        this.completeSet = false;
     }
     
     public int calculateRent(Player owner){
@@ -477,6 +630,10 @@ class Property {
         return this.owned;
     }
     
+    public boolean checkSet(){
+        return this.completeSet;
+    }
+    
     @Override
     public String toString() {
         String returnString = this.getName();
@@ -534,7 +691,7 @@ class CommunityChest{
         this.effect = toCard.get(2).toString();
     }
     
-    public void playCard(Player player){
+    public void playCard(Player player, Player other1, Player other2, Player other3){
         System.out.println(this.getText());
         switch(this.getEffect()){
             case "none" -> {
@@ -546,22 +703,29 @@ class CommunityChest{
             }
             case "PerPlayer" -> {
                 int othersPay = -this.getCashDiff();
-                for(int i = 1; i <= 4; i++){
+                for(int i = 1; i <= 3; i++){
                     switch(i){
                         case 1 -> {
-                            
+                            if(!other1.checkBroke()){
+                                player.changeCash(getCashDiff());
+                                other1.changeCash(othersPay);
+                            }
                         }
                         case 2 -> {
-                            
+                            if(!other1.checkBroke()){
+                                player.changeCash(getCashDiff());
+                                other2.changeCash(othersPay);
+                            }
                         }
                         case 3 -> {
-                            
-                        }
-                        case 4 -> {
-                            
+                            if(!other1.checkBroke()){
+                                player.changeCash(getCashDiff());
+                                other3.changeCash(othersPay);
+                            }
                         }
                     }
                 }
+                System.out.println("Total cash: $"+player.getCash());
             }
             case "Repairs" ->{
                 ArrayList<Property> tempArray = player.getProps();
@@ -618,7 +782,7 @@ class Chance{
         this.effect = toCard.get(2).toString();
     }
     
-    public void playCard(Player player){
+    public void playCard(Player player, Player other1, Player other2, Player other3){
         System.out.println(this.getText());
         switch(this.getEffect()){
             case "none" -> {
@@ -629,7 +793,30 @@ class Chance{
                 player.setJailFree(true);
             }
             case "PerPlayer" -> {
-                //TODO
+                int othersPay = -this.getCashDiff();
+                for(int i = 1; i <= 3; i++){
+                    switch(i){
+                        case 1 -> {
+                            if(!other1.checkBroke()){
+                                player.changeCash(getCashDiff());
+                                other1.changeCash(othersPay);
+                            }
+                        }
+                        case 2 -> {
+                            if(!other1.checkBroke()){
+                                player.changeCash(getCashDiff());
+                                other2.changeCash(othersPay);
+                            }
+                        }
+                        case 3 -> {
+                            if(!other1.checkBroke()){
+                                player.changeCash(getCashDiff());
+                                other3.changeCash(othersPay);
+                            }
+                        }
+                    }
+                }
+                System.out.println("Total cash: $"+player.getCash());
             }
             case "Repairs" ->{
                 ArrayList<Property> tempArray = player.getProps();
