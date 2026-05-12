@@ -24,10 +24,75 @@ public class Monopoly {
     public static void main(String[] args) {
         //Scanner
         Scanner scan = new Scanner(System.in);
-        Player player1 = new Player("test", false, true, 1);
-        Player player2 = new Player("test", false, true, 2);
-        Player player3 = new Player("test", false, true, 3);
-        Player player4 = new Player("test", false, true, 4);
+        
+        System.out.println("""
+                           Welcome to:
+                                                                                                                          
+                                                                                                          88              
+                                                                                                          88              
+                                                                                                          88              
+                           88,dPYba,,adPYba,   ,adPPYba,  8b,dPPYba,   ,adPPYba,  8b,dPPYba,   ,adPPYba,  88 8b       d8  
+                           88P'   "88"    "8a a8"     "8a 88P'   `"8a a8"     "8a 88P'    "8a a8"     "8a 88 `8b     d8'  
+                           88      88      88 8b       d8 88       88 8b       d8 88       d8 8b       d8 88  `8b   d8'   
+                           88      88      88 "8a,   ,a8" 88       88 "8a,   ,a8" 88b,   ,a8" "8a,   ,a8" 88   `8b,d8'    
+                           88      88      88  `"YbbdP"'  88       88  `"YbbdP"'  88`YbbdP"'   `"YbbdP"'  88     Y88'     
+                                                                                  88                             d8'      
+                                                                                  88                            d8'       
+                           (IP owned by Hasbro Gaming)
+                           
+                           Before you aspiring capitalists get started, how many players are participating?
+                           Type: '2', '3', or '4'.""");
+        boolean choiceFail;
+        int playerChoice;
+        String p1Name;
+        String p2Name;
+        String p3Name;
+        String p4Name;
+        boolean p1Participating = true;
+        boolean p2Participating = true;
+        boolean p3Participating = false;
+        boolean p4Participating = false;
+        do{
+            switch(scan.nextInt()){
+                case 2 ->{
+                    System.out.println("""
+                                       You have selected: 2 players!
+                                       It's gonna be a close one!""");
+                    playerChoice = 2;
+                    choiceFail = false;
+                }
+                case 3 ->{
+                    System.out.println("""
+                                       You have selected: 3 players!
+                                       A three-way duel to bankruptcy!""");
+                    playerChoice = 3;
+                    p3Participating = true;
+                    choiceFail = false;
+                }
+                case 4 ->{
+                    System.out.println("""
+                                       You have selected: 4 players!
+                                       A full party!""");
+                    playerChoice = 4;
+                    p3Participating = true;
+                    p4Participating = true;
+                    choiceFail = false;
+                }
+                default ->{
+                    System.out.println("Not a valid number of players. Please try again!");
+                    choiceFail = true;
+                }
+            }
+        }while(choiceFail == true);
+        
+        
+        Player player1 = new Player("test", false, p1Participating, 1);
+        Player player2 = new Player("test", false, p2Participating, 2);
+        Player player3 = new Player("test", false, p3Participating, 3);
+        Player player4 = new Player("test", false, p4Participating, 4);
+        
+        Game game = new Game(player1, player2, player3, player4);
+        game.run();
     }
 }
 
@@ -38,7 +103,9 @@ class Game {
         Player player4;
         ArrayList<Property> propertyList = new ArrayList<>();
         ArrayList<CommunityChest> chestDeck = new ArrayList<>();
+        ArrayList<CommunityChest> chestUsed = new ArrayList<>();
         ArrayList<Chance> chanceDeck = new ArrayList<>();
+        ArrayList<Chance> chanceUsed = new ArrayList<>();
         ArrayList<Player> playerList = new ArrayList<>();
         int PlayersActive = 0;
         String propertiesPath = "Decks/Properties.csv";
@@ -46,7 +113,7 @@ class Game {
         String chancePath = "Decks/Chance.csv";
         //keeps the program running
         boolean run = true;
-        //Where all contacts are kept
+        Scanner scan = new Scanner(System.in);
         
     public Game(Player p1, Player p2, Player p3, Player p4){
         //sets the file path
@@ -111,7 +178,36 @@ class Game {
     }
     
     public void run(){
-        
+        while(run == true){
+            if(!player1.checkBroke()==true){
+                playerTurn(player1);
+                player1.checkBroke();
+                player2.checkBroke();
+                player3.checkBroke();
+                player4.checkBroke();
+            }
+            if(!player2.checkBroke()==true){
+                playerTurn(player2);
+                player1.checkBroke();
+                player2.checkBroke();
+                player3.checkBroke();
+                player4.checkBroke();
+            }
+            if(!player3.checkBroke()==true){
+                playerTurn(player3);
+                player1.checkBroke();
+                player2.checkBroke();
+                player3.checkBroke();
+                player4.checkBroke();
+            }
+            if(!player4.checkBroke()==true){
+                playerTurn(player4);
+                player1.checkBroke();
+                player2.checkBroke();
+                player3.checkBroke();
+                player4.checkBroke();
+            }
+        }
     }
     
     public void playerTurn(Player player){
@@ -131,130 +227,136 @@ class Game {
                 System.out.println("You landed on: GO! Enjoy your $200!");
             }
             case 1 ->{
-                System.out.println("You landed on: Mediterranean Avenue!");
-                if(!this.propertyList.get(0).checkOwned()){
-                    
-                }else if(this.propertyList.get(0).getWhoOwns() == player.getNumber()){ 
-                    if(this.propertyList.get(0).checkSet()){
-                        
-                    }
-                }else{
-                    
-                }
+                checkProp(player, this.propertyList.get(0));
             }
             case 2 ->{
-                System.out.println("You landed on: GO!");
+                switch(player.getNumber()){
+                    case 1 ->{
+                        chestDeck.get(0).playCard(this, player);
+                        
+                    }
+                    case 2 ->{
+                        
+                    }
+                    case 3 ->{
+                        
+                    }
+                    case 4 ->{
+                        
+                    }
+                }
             }
             case 3 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(1));
             }
             case 4 ->{
                 System.out.println("You landed on: GO!");
             }
             case 5 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(22));
             }
             case 6 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(2));
             }
             case 7 ->{
                 System.out.println("You landed on: GO!");
             }
             case 8 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(3));          
             }
             case 9 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(4));          
             }
             case 10 ->{
                 System.out.println("You landed on: GO!");
             }
             case 11 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(5));           
             }
             case 12 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(26));            
             }
             case 13 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(6));         
             }
             case 14 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(7));     
             }
             case 15 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(23));       
             }
             case 16 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(8));          
             }
             case 17 ->{
                 System.out.println("You landed on: GO!");
             }
             case 18 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(9));         
             }
             case 19 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(10));        
             }
             case 20 ->{
-                System.out.println("You landed on: GO!");
+                System.out.println("You landed on: Free Parking! Have a nice stay!");
             }
             case 21 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(11));        
             }
             case 22 ->{
                 System.out.println("You landed on: GO!");
             }
             case 23 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(12));           
             }
             case 24 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(13));   
             }
             case 25 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(24));      
             }
             case 26 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(14));       
             }
             case 27 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(15));       
             }
             case 28 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(27));  
             }
             case 29 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(16));      
             }
             case 30 ->{
-                System.out.println("You landed on: GO!");
+                System.out.println("You landed on: Go to Jail! Aw, rats!");
+                player.setJailed(3);
             }
             case 31 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(17));         
             }
             case 32 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(18));        
             }
             case 33 ->{
                 System.out.println("You landed on: GO!");
             }
             case 34 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(19));
             }
             case 35 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(25));        
             }
             case 36 ->{
                 System.out.println("You landed on: GO!");
             }
             case 37 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(20));      
             }
             case 38 ->{
                 System.out.println("You landed on: GO!");
             }
             case 39 ->{
-                System.out.println("You landed on: GO!");
+                checkProp(player, this.propertyList.get(21));      
             }
         }
         //  - UNOWNED PROPERTY -
@@ -263,6 +365,76 @@ class Game {
         //   Subtract cash from player, add property to playerProps
         //   Original property has owned set to true, and whoOwns set to playerNumber
         //  - IF NOT BOUGHT -
+    }
+    
+    public void playChest(Player player){
+        chestDeck.get(0).playCard(this, player);
+        chestUsed.add(chestDeck.get(0));
+        chestDeck.remove(0);
+            
+    }
+    
+    public void buyProperty(Player player, Property property){
+        if(player.getCash() <= property.getCost()){
+            System.out.println("""
+                               You're too broke to afford this property.
+                               Come back when you're a little richer.""");
+        }else{
+            System.out.println("Would you like to purchase this property? You have $" + player.getCash());
+            System.out.println(property.getName() + " costs $" + property.getCost());
+            System.out.println("Input 'y' or 'n' to make your choice.");
+            if(scan.next().equals("y")){
+                //TODO
+            }else if(scan.next().equals("n")){
+                
+            }
+        }
+    }
+    
+    public void checkProp(Player player, Property property){
+        String flavorText = "You landed on: " + property.getName() + "!";
+        switch(property.getName()){
+            case "Reading Railroad" ->{
+                flavorText += " All aboard!";
+            }
+            case "Pennsylvania Railroad" ->{
+                flavorText += " All aboard!";
+            }
+            case "B. & O. Railroad" ->{
+                flavorText += " All aboard!";
+            }
+            case "Short Line" ->{
+                flavorText += " All aboard!";
+            }
+            case "Electric Company" ->{
+                flavorText += " Bzzzzap!";
+            }
+            case "Water Works" ->{
+                flavorText += " Sploosh!";
+            }
+        }
+        System.out.println(flavorText);
+        
+        if(!property.checkOwned()){
+            buyProperty(player, property);
+        }else if(property.getWhoOwns() == player.getNumber()){
+            System.out.println("Just cruising by...");
+        }else{
+            switch(property.getWhoOwns()){
+                case 1 ->{
+                    player.changeCash(property.calculateRent(player1));
+                }
+                case 2 ->{
+                    player.changeCash(property.calculateRent(player2));
+                }
+                case 3 ->{
+                    player.changeCash(property.calculateRent(player3));
+                }
+                case 4 ->{
+                    player.changeCash(property.calculateRent(player4));
+                }
+            }
+        }
     }
 }
 
@@ -387,6 +559,9 @@ class Player {
     }
     
     public boolean checkBroke(){
+        if(this.getCash() <= 0){
+            this.playerBroke = true;
+        }
         return this.playerBroke;
     }
     
@@ -560,7 +735,7 @@ class Property {
                     }
                 }
             }
-            System.out.println("You musy pay $" + finalRent
+            System.out.println("You must pay $" + finalRent
                 + " to " + owner.getName() + "!");
         }
         return finalRent;
@@ -691,44 +866,50 @@ class CommunityChest{
         this.effect = toCard.get(2).toString();
     }
     
-    public void playCard(Player player, Player other1, Player other2, Player other3){
+    public void playCard(Game game, Player drawing){
         System.out.println(this.getText());
         switch(this.getEffect()){
             case "none" -> {
-                player.changeCash(this.getCashDiff());
-                System.out.println("Total cash: $"+player.getCash());
+                drawing.changeCash(this.getCashDiff());
+                System.out.println("Total cash: $"+drawing.getCash());
             }
             case "JailFree" -> {
-                player.setJailFree(true);
+                drawing.setJailFree(true);
             }
             case "PerPlayer" -> {
                 int othersPay = -this.getCashDiff();
-                for(int i = 1; i <= 3; i++){
+                for(int i = 1; i <= 4; i++){
                     switch(i){
                         case 1 -> {
-                            if(!other1.checkBroke()){
-                                player.changeCash(getCashDiff());
-                                other1.changeCash(othersPay);
+                            if(!game.player1.checkBroke() && !game.player1.equals(drawing)){
+                                drawing.changeCash(getCashDiff());
+                                game.player1.changeCash(othersPay);
                             }
                         }
                         case 2 -> {
-                            if(!other1.checkBroke()){
-                                player.changeCash(getCashDiff());
-                                other2.changeCash(othersPay);
+                            if(!game.player2.checkBroke() && !game.player2.equals(drawing)){
+                                drawing.changeCash(getCashDiff());
+                                game.player2.changeCash(othersPay);
                             }
                         }
                         case 3 -> {
-                            if(!other1.checkBroke()){
-                                player.changeCash(getCashDiff());
-                                other3.changeCash(othersPay);
+                            if(!game.player3.checkBroke() && !game.player3.equals(drawing)){
+                                drawing.changeCash(getCashDiff());
+                                game.player3.changeCash(othersPay);
+                            }
+                        }
+                        case 4 -> {
+                            if(!game.player4.checkBroke() && !game.player4.equals(drawing)){
+                                drawing.changeCash(getCashDiff());
+                                game.player4.changeCash(othersPay);
                             }
                         }
                     }
                 }
-                System.out.println("Total cash: $"+player.getCash());
+                System.out.println("Total cash: $"+drawing.getCash());
             }
             case "Repairs" ->{
-                ArrayList<Property> tempArray = player.getProps();
+                ArrayList<Property> tempArray = drawing.getProps();
                 int totalHouses = 0;
                 int totalHotels = 0;
                 int doshLost = 0;
@@ -742,18 +923,18 @@ class CommunityChest{
                 totalHouses = totalHouses * 25;
                 totalHotels = totalHotels * 100;
                 doshLost = doshLost - (totalHouses + totalHotels);
-                player.changeCash(doshLost);
+                drawing.changeCash(doshLost);
                 System.out.println("You paid: $" + doshLost + "!"
-                        + "\nTotal cash: $" + player.getCash());
+                        + "\nTotal cash: $" + drawing.getCash());
             }
             case "Jail" -> {
-                player.setSpace(10);
-                player.setJailed(3);
+                drawing.setSpace(10);
+                drawing.setJailed(3);
             }
             case "GO" -> {
-                player.setSpace(0);
-                player.changeCash(200);
-                System.out.println("Total cash: $"+player.getCash());
+                drawing.setSpace(0);
+                drawing.changeCash(200);
+                System.out.println("Total cash: $"+drawing.getCash());
             }
         }
     }
@@ -782,44 +963,50 @@ class Chance{
         this.effect = toCard.get(2).toString();
     }
     
-    public void playCard(Player player, Player other1, Player other2, Player other3){
+    public void playCard(Game game, Player drawing){
         System.out.println(this.getText());
         switch(this.getEffect()){
             case "none" -> {
-                player.changeCash(this.getCashDiff());
-                System.out.println("Total cash: $"+player.getCash());
+                drawing.changeCash(this.getCashDiff());
+                System.out.println("Total cash: $"+drawing.getCash());
             }
             case "JailFree" -> {
-                player.setJailFree(true);
+                drawing.setJailFree(true);
             }
             case "PerPlayer" -> {
                 int othersPay = -this.getCashDiff();
-                for(int i = 1; i <= 3; i++){
+                for(int i = 1; i <= 4; i++){
                     switch(i){
                         case 1 -> {
-                            if(!other1.checkBroke()){
-                                player.changeCash(getCashDiff());
-                                other1.changeCash(othersPay);
+                            if(!game.player1.checkBroke() && !game.player1.equals(drawing)){
+                                drawing.changeCash(getCashDiff());
+                                game.player1.changeCash(othersPay);
                             }
                         }
                         case 2 -> {
-                            if(!other1.checkBroke()){
-                                player.changeCash(getCashDiff());
-                                other2.changeCash(othersPay);
+                            if(!game.player2.checkBroke() && !game.player2.equals(drawing)){
+                                drawing.changeCash(getCashDiff());
+                                game.player2.changeCash(othersPay);
                             }
                         }
                         case 3 -> {
-                            if(!other1.checkBroke()){
-                                player.changeCash(getCashDiff());
-                                other3.changeCash(othersPay);
+                            if(!game.player3.checkBroke() && !game.player3.equals(drawing)){
+                                drawing.changeCash(getCashDiff());
+                                game.player3.changeCash(othersPay);
+                            }
+                        }
+                        case 4 -> {
+                            if(!game.player4.checkBroke() && !game.player4.equals(drawing)){
+                                drawing.changeCash(getCashDiff());
+                                game.player4.changeCash(othersPay);
                             }
                         }
                     }
                 }
-                System.out.println("Total cash: $"+player.getCash());
+                System.out.println("Total cash: $"+drawing.getCash());
             }
             case "Repairs" ->{
-                ArrayList<Property> tempArray = player.getProps();
+                ArrayList<Property> tempArray = drawing.getProps();
                 int totalHouses = 0;
                 int totalHotels = 0;
                 int doshLost = 0;
@@ -833,52 +1020,52 @@ class Chance{
                 totalHouses = totalHouses * 25;
                 totalHotels = totalHotels * 100;
                 doshLost = doshLost - (totalHouses + totalHotels);
-                player.changeCash(doshLost);
+                drawing.changeCash(doshLost);
                 System.out.println("You paid: $" + doshLost + "!"
-                        + "\nTotal cash: $" + player.getCash());
+                        + "\nTotal cash: $" + drawing.getCash());
             }
             case "Jail" -> {
-                player.setSpace(10);
-                player.setJailed(3);
+                drawing.setSpace(10);
+                drawing.setJailed(3);
             }
             case "GO" -> {
-                player.setSpace(0);
-                player.changeCash(200);
-                System.out.println("Total cash: $"+player.getCash());
+                drawing.setSpace(0);
+                drawing.changeCash(200);
+                System.out.println("Total cash: $"+drawing.getCash());
             }
             case "Boardwalk" -> {
-                while(player. getSpace() != 39){
-                    if(player.getSpace() < 39){
-                        player.setSpace(player.getSpace() + 1);
+                while(drawing. getSpace() != 39){
+                    if(drawing.getSpace() < 39){
+                        drawing.setSpace(drawing.getSpace() + 1);
                     }
                 }
             }
             case "IllinoisAve" -> {
-                while(player. getSpace() != 24){
-                    if(player.getSpace() == 39){
-                        player.setSpace(0);
-                        player.changeCash(200);
-                        System.out.println("You passed Go! Collect $200.\nTotal cash: $"+player.getCash());
-                    }else if(player.getSpace() < 39){
-                        player.setSpace(player.getSpace() + 1);
+                while(drawing. getSpace() != 24){
+                    if(drawing.getSpace() == 39){
+                        drawing.setSpace(0);
+                        drawing.changeCash(200);
+                        System.out.println("You passed Go! Collect $200.\nTotal cash: $"+drawing.getCash());
+                    }else if(drawing.getSpace() < 39){
+                        drawing.setSpace(drawing.getSpace() + 1);
                     }
                 }
             }
             case "StCharlesPlace" -> {
-                while(player. getSpace() != 11){
-                    if(player.getSpace() == 39){
-                        player.setSpace(0);
-                        player.changeCash(200);
-                        System.out.println("You passed Go! Collect $200.\nTotal cash: $"+player.getCash());
-                    }else if(player.getSpace() < 39){
-                        player.setSpace(player.getSpace() + 1);
+                while(drawing. getSpace() != 11){
+                    if(drawing.getSpace() == 39){
+                        drawing.setSpace(0);
+                        drawing.changeCash(200);
+                        System.out.println("You passed Go! Collect $200.\nTotal cash: $"+drawing.getCash());
+                    }else if(drawing.getSpace() < 39){
+                        drawing.setSpace(drawing.getSpace() + 1);
                     }
                 }
             }
             case "Railroad" -> {
                 boolean railCheck = true;
                 do {
-                    switch (player.getSpace()) {
+                    switch (drawing.getSpace()) {
                         case 5 -> {
                             System.out.println("You landed on: Reading Railroad!");
                             railCheck = false;
@@ -896,12 +1083,12 @@ class Chance{
                             railCheck = false;
                         }
                         case 39 -> {
-                            player.setSpace(0);
-                            player.changeCash(200);
-                            System.out.println("You passed Go! Collect $200.\nTotal cash: $"+player.getCash());
+                            drawing.setSpace(0);
+                            drawing.changeCash(200);
+                            System.out.println("You passed Go! Collect $200.\nTotal cash: $"+drawing.getCash());
                         }
                         default -> {
-                            player.setSpace(player.getSpace() + 1);
+                            drawing.setSpace(drawing.getSpace() + 1);
                         }
                     }
                 }while(railCheck == true);
@@ -909,7 +1096,7 @@ class Chance{
             case "Utility" -> {
                 boolean utilCheck = true;
                 do {
-                    switch (player.getSpace()) {
+                    switch (drawing.getSpace()) {
                         case 12 -> {
                             System.out.println("You landed on: Electric Company!");
                             utilCheck = false;
@@ -919,29 +1106,29 @@ class Chance{
                             utilCheck = false;
                         }
                         case 39 -> {
-                            player.setSpace(0);
-                            player.changeCash(200);
-                            System.out.println("You passed Go! Collect $200.\nTotal cash: $"+player.getCash());
+                            drawing.setSpace(0);
+                            drawing.changeCash(200);
+                            System.out.println("You passed Go! Collect $200.\nTotal cash: $"+drawing.getCash());
                         }
                         default -> {
-                            player.setSpace(player.getSpace() + 1);
+                            drawing.setSpace(drawing.getSpace() + 1);
                         }
                     }
                 }while(utilCheck == true);
             }
             case "Back3" -> {
                 for(int i = 0; i < 3; i++){
-                    player.setSpace(player.getSpace() - 1);
+                    drawing.setSpace(drawing.getSpace() - 1);
                 }
             }
             case "ReadRailroad" -> {
-                while(player. getSpace() != 5){
-                    if(player.getSpace() == 39){
-                        player.setSpace(0);
-                        player.changeCash(200);
-                        System.out.println("You passed Go! Collect $200.\nTotal cash: $"+player.getCash());
-                    }else if(player.getSpace() < 39){
-                        player.setSpace(player.getSpace() + 1);
+                while(drawing. getSpace() != 5){
+                    if(drawing.getSpace() == 39){
+                        drawing.setSpace(0);
+                        drawing.changeCash(200);
+                        System.out.println("You passed Go! Collect $200.\nTotal cash: $"+drawing.getCash());
+                    }else if(drawing.getSpace() < 39){
+                        drawing.setSpace(drawing.getSpace() + 1);
                     }
                 }
             }
@@ -963,11 +1150,8 @@ class Chance{
 
 /*
 TODO:
- - Chance class
- - CC class
- - Add/Sub properties
- - All Property methods
- - Game class
- - Add players
- - Computer implementation if time
+ - buyProperties() method
+ - Finish Game class
+    - Specifically, finish run() method
+ - Add player names
 */
