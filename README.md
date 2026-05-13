@@ -11,14 +11,19 @@ ALSO NOTE that this is a work in progress.
 Bug testing is alive and in progress, and unimplemented/unfixed features are as follows:
 
 FEATURES:
-- Adding buildings to properties in full sets
-- Mortgaging properties
+- Sounds to be implemented:
+  - # of clicks corresponding to spaces moved
+  - Mario Kart Wii box sound for Chance
+  - Minecraft chest sound for CommChest
+  - Money/trumpet sound for gaining and losing money, respectively
+- Player piece selection w/ sounds for movement
+- Tutorial at the beginning of the game
+- Adding buildings to properties in full sets?
+- Mortgaging properties???
 - Computer players (likely never)
 
 BUGS:
 - Game will not end when all but one player is bankrupted (solution untested)
 
 NITPICKS:
-- Doubles message will appear BEFORE events, likely needs to be rewritten
-- Additional line breaks needed/unnecessary for clarity
-- Add set details in propertyBuy()
+- 
