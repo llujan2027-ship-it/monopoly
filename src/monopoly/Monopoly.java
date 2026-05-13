@@ -11,12 +11,11 @@ package monopoly;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
+import javax.sound.sampled.*;
+import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 public class Monopoly {
     /**
      * @param args the command line arguments
@@ -39,6 +38,8 @@ public class Monopoly {
                                                                                   88                             d8'      
                                                                                   88                            d8'       
                            (IP owned by Hasbro Gaming)
+                           
+                           _____________________________________________________________________________________________
                            
                            Before you aspiring capitalists get started, how many players are participating?
                            Type: '2', '3', or '4'.""");
@@ -182,6 +183,9 @@ class Game {
         //keeps the program running
         boolean run = true;
         Scanner scan = new Scanner(System.in);
+        //create sound object
+        SoundClass chaching = new SoundClass("sounds/75235__creek23__cha-ching.wav");
+        //create a time slot for the sound to play
         
     public Game(Player p1, Player p2, Player p3, Player p4){
         //sets the file path
@@ -253,30 +257,10 @@ class Game {
     
     public void run(){
         while(run == true){
-            System.out.println("\n\n___________Round "+totalTurns+"!___________\n\n");
-            /*System.out.println(
-                "Before: "+
-                player1.getName() +
-                " | " +
-                System.identityHashCode(player1)
-            );
-            
-            boolean broke = player1.checkBroke();
-            
-            System.out.println(
-                "After check: "+
-                player1.getName() +
-                " | " +
-                System.identityHashCode(player1)
-            );*/
+            System.out.println("\n___________Round "+totalTurns+"!___________\n");
             if(!player1.checkBroke()){
-                /*System.out.println(
-                    "Inside if: "+
-                    player1.getName() +
-                    " | " +
-                    System.identityHashCode(player1)
-                );*/
-                System.out.println("\n\n~~~~~~~~~~ "+player1.getName()+ "'s Turn! ~~~~~~~~~~\n\n");
+                System.out.println("~~~~~~~~~~ "+player1.getName()+ "'s Turn! ~~~~~~~~~~\n");
+                //Check buildings
                 playerTurn(player1);
                 if(player1.checkBroke()){
                     System.out.println("You're broke! Game over!");
@@ -291,12 +275,9 @@ class Game {
                     }
                 }
             }
-                /*for(char c : player1.getName().toCharArray()){
-                    System.out.println((int)c);
-                }*/
-            //System.out.println(player1.getName());
             if(!player2.checkBroke()){
-                System.out.println("\n\n~~~~~~~~~~ "+player2.getName()+ "'s Turn! ~~~~~~~~~~\n\n");
+                System.out.println("~~~~~~~~~~ "+player2.getName()+ "'s Turn! ~~~~~~~~~~\n");
+                //Check buildings
                 playerTurn(player2);
                 if(player2.checkBroke()){
                     System.out.println("You're broke! Game over!");
@@ -312,7 +293,8 @@ class Game {
                 }
             }
             if(!player3.checkBroke()){
-                System.out.println("\n\n~~~~~~~~~~ "+player3.getName()+ "'s Turn! ~~~~~~~~~~\n\n");
+                System.out.println("~~~~~~~~~~ "+player3.getName()+ "'s Turn! ~~~~~~~~~~\n");
+                //Check buildings
                 playerTurn(player3);
                 if(player3.checkBroke()){
                     System.out.println("You're broke! Game over!");
@@ -328,7 +310,8 @@ class Game {
                 }
             }
             if(!player4.checkBroke()){
-                System.out.println("\n\n~~~~~~~~~~ "+player4.getName()+ "'s Turn! ~~~~~~~~~~\n\n");
+                System.out.println("~~~~~~~~~~ "+player4.getName()+ "'s Turn! ~~~~~~~~~~\n");
+                //Check buildings
                 playerTurn(player4);
                 if(player4.checkBroke()){
                     System.out.println("You're broke! Game over!");
@@ -343,7 +326,7 @@ class Game {
                     }
                 }
             }
-            System.out.println("\n\n___________Round "+totalTurns+" end!___________\n\n");
+            System.out.println("\n___________Round "+totalTurns+" end!___________\n");
             totalTurns++;
             if(playersBroke == 3){
                 if(!player1.checkBroke()){
@@ -365,7 +348,7 @@ class Game {
         }else{
          player.rollJail(this);
         }
-        System.out.println("\n\n~~~~~~~~~~ Turn end! ~~~~~~~~~~\n\n");
+        System.out.println("~~~~~~~~~~ Turn end! ~~~~~~~~~~\n");
     }
     
     public void checkSpace(Player player){
@@ -387,6 +370,7 @@ class Game {
             case 4 ->{
                 System.out.println("You landed on: Income Tax! Pay up $200!");
                 player.changeCash(-200);
+                System.out.println("Your total cash: " + player.getCash());
             }
             case 5 ->{
                 checkProp(player, this.propertyList.get(22));
@@ -497,6 +481,7 @@ class Game {
             case 38 ->{
                 System.out.println("You landed on: Luxury Tax! Pay up $100!");
                 player.changeCash(-100);
+                System.out.println("Your total cash: " + player.getCash());
             }
             case 39 ->{
                 checkProp(player, this.propertyList.get(21));      
@@ -532,8 +517,8 @@ class Game {
                                You're too broke to afford this property.
                                Come back when you're a little richer.""");
         }else{
-            System.out.println("Would you like to purchase this property? You have $" + player.getCash());
-            System.out.println(property.getName() + " costs $" + property.getCost());
+            System.out.println("Would you like to purchase this property? You have $" + player.getCash() + ".");
+            System.out.println(property.getName() + " costs $" + property.getCost() + " and belongs to the " + property.getSet() + " set.\n");
             System.out.println("Input 'y' or 'n' to make your choice.");
             boolean rollLoop = true;
             while(rollLoop){
@@ -558,22 +543,25 @@ class Game {
         String flavorText = "You landed on: " + property.getName() + "!";
         switch(property.getName()){
             case "Reading Railroad" ->{
-                flavorText += " All aboard!";
+                flavorText += " All aboard!\n";
             }
             case "Pennsylvania Railroad" ->{
-                flavorText += " All aboard!";
+                flavorText += " All aboard!\n";
             }
             case "B. & O. Railroad" ->{
-                flavorText += " All aboard!";
+                flavorText += " All aboard!\n";
             }
             case "Short Line" ->{
-                flavorText += " All aboard!";
+                flavorText += " All aboard!\n";
             }
             case "Electric Company" ->{
-                flavorText += " Bzzzzap!";
+                flavorText += " Bzzzzap!\n";
             }
             case "Water Works" ->{
-                flavorText += " Sploosh!";
+                flavorText += " Sploosh!\n";
+            }
+            default ->{
+                flavorText += "\n";
             }
         }
         System.out.println(flavorText);
@@ -581,7 +569,7 @@ class Game {
         if(!property.checkOwned()){
             buyProperty(player, property);
         }else if(property.getWhoOwns() == player.getNumber()){
-            System.out.println("Just cruising by...");
+            System.out.println("Just cruising by your property...");
         }else{
             switch(property.getWhoOwns()){
                 case 1 ->{
@@ -619,7 +607,7 @@ class Player {
         this.playerCash = 1000;
         this.jailFree = false;
         this.playerJailed = 0;
-        this.playerBroke = active;
+        this.playerBroke = !active;
         this.computerPlayer = computer;
         this.currentSpace = 0;
         this.playerNumber = number;
@@ -629,17 +617,19 @@ class Player {
     Scanner scan = new Scanner(System.in);
     
     public void roll(Game game){
-        System.out.println("Input 'y' to roll dice when ready!");
-        boolean rollLoop = true;
-        while(rollLoop){
+        boolean doublesTrue = false;
+        do{
+            System.out.println("Input 'y' to roll dice when ready!");
+            boolean rollLoop = true;
+            while(rollLoop){
             String temp = scan.next();
             if(temp.equals("y")){
                 rollLoop = false;
                 Die d1 = new Die();
                 Die d2 = new Die();
-                boolean doublesTrue = false;
+                
                 int doublesCounter = 0;
-                do{
+                
                     System.out.println("\nRolling...");
                     int d1Roll = d1.roll();
                     int d2Roll = d2.roll();
@@ -647,7 +637,6 @@ class Player {
                     System.out.println("You rolled: "+d1Roll+" and "+d2Roll+", totalling to "+total+"!\n");
                     doublesTrue = (d1Roll == d2Roll);
                     if((doublesTrue == true) && (doublesCounter < 3)){
-                        System.out.println("\nThat's doubles! Go again!");
                         doublesCounter++;
                     }
                     if(doublesCounter < 3){
@@ -664,14 +653,18 @@ class Player {
                             }
                         }
                         game.checkSpace(this);
+                    
+                    if((doublesTrue == true) && (doublesCounter < 3)){
+                        System.out.println("\nThat's doubles! Go again!");
+                    }
                     }else if(doublesCounter == 3){
                         System.out.println("\nThat's three!!! Go to jail, sucker!!!");
                         this.setJailed(3);
                         this.setSpace(10);
                     }
-                }while(doublesTrue == true);
+                }
             }
-        }
+        }while(doublesTrue == true);
     }
     
     public void rollJail(Game game){
@@ -716,7 +709,7 @@ class Player {
             }
         }
         
-        if((this.getJailed() == 0) && (this.getSpace() == 10)){
+        if((this.getJailed() >= 1)){
             System.out.println(""" 
                                Input 'y' to roll dice when ready!""");
             boolean rollLoop = true;
@@ -815,6 +808,9 @@ class Player {
     
     public void changeCash(int cash){
         playerCash = playerCash + cash;
+        if(getCash() <= 0){
+            System.out.println("You're broke! Better luck next time!");
+        }
     }
     
     public void addProps(int propertySpace, ArrayList<Property> propList){
@@ -974,21 +970,27 @@ class Property {
                         int tempRent = this.getRent() * 2;
                         switch(this.getBuildings()){
                             case 1 -> {
+                                System.out.println("One house!");
                                 finalRent = this.getHouse1Rent();
                             }
                             case 2 -> {
+                                System.out.println("Two houses!!");
                                 finalRent = this.getHouse2Rent();
                             }
                             case 3 -> {
+                                System.out.println("Three houses!!!");
                                 finalRent = this.getHouse3Rent();
                             }
                             case 4 -> {
+                                System.out.println("Four houses!!!!");
                                 finalRent = this.getHouse4Rent();
                             }
                             case 5 -> {
+                                System.out.println("Hotel!!!!!");
                                 finalRent = this.getHotelRent();
                             }
                             default -> {
+                                System.out.println("Full set!");
                                 finalRent = tempRent;
                             }
                         }
@@ -1307,6 +1309,7 @@ class Chance{
                         drawing.setSpace(drawing.getSpace() + 1);
                     }
                 }
+                game.checkSpace(drawing);
             }
             case "IllinoisAve" -> {
                 while(drawing. getSpace() != 24){
@@ -1318,6 +1321,7 @@ class Chance{
                         drawing.setSpace(drawing.getSpace() + 1);
                     }
                 }
+                game.checkSpace(drawing);
             }
             case "StCharlesPlace" -> {
                 while(drawing. getSpace() != 11){
@@ -1329,6 +1333,7 @@ class Chance{
                         drawing.setSpace(drawing.getSpace() + 1);
                     }
                 }
+                game.checkSpace(drawing);
             }
             case "Railroad" -> {
                 boolean railCheck = true;
@@ -1360,6 +1365,7 @@ class Chance{
                         }
                     }
                 }while(railCheck == true);
+                game.checkSpace(drawing);
             }
             case "Utility" -> {
                 boolean utilCheck = true;
@@ -1383,14 +1389,16 @@ class Chance{
                         }
                     }
                 }while(utilCheck == true);
+                game.checkSpace(drawing);
             }
             case "Back3" -> {
                 for(int i = 0; i < 3; i++){
                     drawing.setSpace(drawing.getSpace() - 1);
                 }
+                game.checkSpace(drawing);
             }
             case "ReadRailroad" -> {
-                while(drawing. getSpace() != 5){
+                while(drawing.getSpace() != 5){
                     if(drawing.getSpace() == 39){
                         drawing.setSpace(0);
                         drawing.changeCash(200);
@@ -1399,6 +1407,7 @@ class Chance{
                         drawing.setSpace(drawing.getSpace() + 1);
                     }
                 }
+                game.checkSpace(drawing);
             }
         }
     }
@@ -1415,6 +1424,54 @@ class Chance{
         return this.effect;
     }
 }
+
+class SoundClass{
+    //a file path same a text files - so inside the project
+    //you should find your own wav sound file (millions out there)
+    String filePath;
+    public SoundClass(String filePath){
+        this.filePath = filePath; // Replace with your file path
+    }
+    
+    //syntax for playing sounds - do not change this!
+    public static void playSound(String filePath) {
+        try {
+            File soundFile = new File(filePath);
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.setFramePosition(0);
+            System.out.println("Playing the sound");
+            clip.start();
+
+            // Keep the program running until the sound finishes playing
+            clip.addLineListener(event -> {
+                if (event.getType() == LineEvent.Type.STOP) {
+                    clip.close();
+                    System.exit(0);
+                }
+            });
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
+    //you must create some time for the sound, or it will be played in 0 seconds
+    public void createTimeForSound() {
+        TimerTask task = new TimerTask() {
+            public void run() {
+                playSound(filePath);
+                //System.out.println("Task performed on: " + new Date() + "n" +
+                //  "Thread's name: " + Thread.currentThread().getName());
+
+            }
+        };
+        Timer timer = new Timer("Timer");
+        //1000 miliseconds, aka 1 second. Your clip may require more time.
+        long delay = 1000L;
+        timer.schedule(task, delay);
+    }
+}
+
 
 /*
 TODO:
