@@ -1418,6 +1418,5 @@ class Chance{
 
 /*
 TODO:
- - Finish Game class
-    - Specifically, finish run() method
+ - located within README
 */
