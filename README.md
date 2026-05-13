@@ -21,7 +21,8 @@ FEATURES:
 - Adding buildings to properties in full sets?
 - Mortgaging properties???
 - Computer players (likely never)
+- 
 BUGS:
-- Game will not end when all but one player is bankrupted (solution untested)=
+- Game will not end when all but one player is bankrupted (solution untested)
 NITPICKS:
 - 
