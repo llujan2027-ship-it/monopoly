@@ -12,14 +12,13 @@ Bug testing is alive and in progress, and unimplemented/unfixed features are as 
 
 FEATURES:
 - Adding buildings to properties in full sets
+- Mortgaging properties
 - Computer players (likely never)
 
-BUGS: (active list)
-- Player is unable to roll for jail after declining $50
-- Previous likely also applies to Get Out of Jail Free prompt
-- Player names will not appear during turns
+BUGS:
 - Game will not end when all but one player is bankrupted (solution untested)
-- When 4 players are selected, turns go automatically in an infinite loop without player input
-- If input is not "y" when buying a property, game will no longer responding (solution untested)
+
+NITPICKS:
 - Doubles message will appear BEFORE events, likely needs to be rewritten
 - Additional line breaks needed/unnecessary for clarity
+- Add set details in propertyBuy()
