@@ -12,7 +12,7 @@ Bug testing is alive and in progress, and unimplemented/unfixed features are as 
 
 FEATURES:
 - Sounds to be implemented:
-  - # of clicks corresponding to spaces moved
+  - Number of clicks corresponding to spaces moved
   - Mario Kart Wii box sound for Chance
   - Minecraft chest sound for CommChest
   - Money/trumpet sound for gaining and losing money, respectively
@@ -21,9 +21,7 @@ FEATURES:
 - Adding buildings to properties in full sets?
 - Mortgaging properties???
 - Computer players (likely never)
-
 BUGS:
-- Game will not end when all but one player is bankrupted (solution untested)
-
+- Game will not end when all but one player is bankrupted (solution untested)=
 NITPICKS:
 - 
