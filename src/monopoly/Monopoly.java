@@ -44,10 +44,10 @@ public class Monopoly {
                            Type: '2', '3', or '4'.""");
         boolean choiceFail;
         int playerChoice;
-        String p1Name;
-        String p2Name;
-        String p3Name;
-        String p4Name;
+        String p1Name = "";
+        String p2Name = "";
+        String p3Name = "";
+        String p4Name = "";
         boolean p1Participating = true;
         boolean p2Participating = true;
         boolean p3Participating = false;
@@ -56,42 +56,109 @@ public class Monopoly {
             switch(scan.nextInt()){
                 case 2 ->{
                     System.out.println("""
+                                       
                                        You have selected: 2 players!
-                                       It's gonna be a close one!""");
+                                       It's gonna be a close one!
+                                       """);
                     playerChoice = 2;
                     choiceFail = false;
                 }
                 case 3 ->{
                     System.out.println("""
+                                       
                                        You have selected: 3 players!
-                                       A three-way duel to bankruptcy!""");
+                                       A three-way duel to bankruptcy!
+                                       """);
                     playerChoice = 3;
                     p3Participating = true;
                     choiceFail = false;
                 }
                 case 4 ->{
                     System.out.println("""
+                                       
                                        You have selected: 4 players!
-                                       A full party!""");
+                                       A full party!
+                                       """);
                     playerChoice = 4;
                     p3Participating = true;
                     p4Participating = true;
                     choiceFail = false;
                 }
                 default ->{
-                    System.out.println("Not a valid number of players. Please try again!");
+                    System.out.println("\nNot a valid number of players. Please try again!\n");
                     choiceFail = true;
                 }
             }
         }while(choiceFail == true);
         
+        for(int i = 0; i < 4; i++){
+            switch (i){
+                case 0 ->{
+                    if(p1Participating){
+                            System.out.println("Player 1: What is your name?\nPlease input.");
+                        do{
+                            p1Name = scan.nextLine();
+                            if(!p1Name.equals("")){
+                                System.out.println("\nYour name is: " + p1Name + "!\n");
+                                choiceFail = false;
+                            }else{
+                                choiceFail = true;
+                            }
+                        }while(choiceFail == true);
+                    }
+                }
+                case 1 ->{
+                    if(p2Participating){
+                            System.out.println("Player 2: What is your name?\nPlease input.");
+                        do{
+                            p2Name = scan.nextLine();
+                            if(!p2Name.equals("")){
+                                System.out.println("\nYour name is: " + p2Name + "!\n");
+                                choiceFail = false;
+                            }else{
+                                choiceFail = true;
+                            }
+                        }while(choiceFail == true);
+                    }
+                }
+                case 2 ->{
+                    if(p3Participating){
+                            System.out.println("Player 3: What is your name?\nPlease input.");
+                        do{
+                            p3Name = scan.nextLine();
+                            if(!p3Name.equals("")){
+                                System.out.println("\nYour name is: " + p3Name + "!\n");
+                                choiceFail = false;
+                            }else{
+                                choiceFail = true;
+                            }
+                        }while(choiceFail == true);
+                    }
+                }
+                case 3 ->{
+                    if(p4Participating){
+                            System.out.println("Player 4: What is your name?\nPlease input.");
+                        do{
+                            p4Name = scan.nextLine();
+                            if(!p4Name.equals("")){
+                                System.out.println("\nYour name is: " + p4Name + "!\n");
+                                choiceFail = false;
+                            }else{
+                                choiceFail = true;
+                            }
+                        }while(choiceFail == true);
+                    }
+                }
+            }
+        }
         
-        Player player1 = new Player("test", false, p1Participating, 1);
-        Player player2 = new Player("test", false, p2Participating, 2);
-        Player player3 = new Player("test", false, p3Participating, 3);
-        Player player4 = new Player("test", false, p4Participating, 4);
+        Player player1 = new Player(p1Name, false, p1Participating, 1);
+        Player player2 = new Player(p2Name, false, p2Participating, 2);
+        Player player3 = new Player(p3Name, false, p3Participating, 3);
+        Player player4 = new Player(p4Name, false, p4Participating, 4);
         
         Game game = new Game(player1, player2, player3, player4);
+        System.out.println("\nStarting game!");
         game.run();
     }
 }
@@ -107,7 +174,8 @@ class Game {
         ArrayList<Chance> chanceDeck = new ArrayList<>();
         ArrayList<Chance> chanceUsed = new ArrayList<>();
         ArrayList<Player> playerList = new ArrayList<>();
-        int PlayersActive = 0;
+        int playersBroke = 0;
+        int totalTurns = 1;
         String propertiesPath = "Decks/Properties.csv";
         String chestPath = "Decks/CommunityChest.csv";
         String chancePath = "Decks/Chance.csv";
@@ -120,7 +188,7 @@ class Game {
         try (BufferedReader reader = new BufferedReader(new FileReader(this.propertiesPath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                //Create a contact
+                //Create a property
                     Object[] tempArray = line.split(",");
                 if(!tempArray[0].equals("Property Name")){
                     ArrayList<Object> toProp = new ArrayList<>(Arrays.asList(tempArray));
@@ -136,7 +204,7 @@ class Game {
         try (BufferedReader reader = new BufferedReader(new FileReader(this.chestPath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                //Create a contact
+                //Create a chest card
                     Object[] tempArray = line.split(",");
                 if(!tempArray[0].equals("Card flavor text")){
                     ArrayList<Object> toCard = new ArrayList<>(Arrays.asList(tempArray));
@@ -152,7 +220,7 @@ class Game {
         try (BufferedReader reader = new BufferedReader(new FileReader(this.chancePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                //Create a contact
+                //Create a chance card
                     Object[] tempArray = line.split(",");
                 if(!tempArray[0].equals("Card flavor text")){
                     ArrayList<Object> toCard = new ArrayList<>(Arrays.asList(tempArray));
@@ -175,49 +243,129 @@ class Game {
         playerList.add(player3);
         this.player4 = p4;
         playerList.add(player4);
+        
+        for(int i = 0; i < playerList.size(); i++){
+            if(playerList.get(i).checkBroke()){
+                playersBroke++;
+            }
+        }
     }
     
     public void run(){
         while(run == true){
-            if(!player1.checkBroke()==true){
+            System.out.println("\n\n___________Round "+totalTurns+"!___________\n\n");
+            /*System.out.println(
+                "Before: "+
+                player1.getName() +
+                " | " +
+                System.identityHashCode(player1)
+            );
+            
+            boolean broke = player1.checkBroke();
+            
+            System.out.println(
+                "After check: "+
+                player1.getName() +
+                " | " +
+                System.identityHashCode(player1)
+            );*/
+            if(!player1.checkBroke()){
+                /*System.out.println(
+                    "Inside if: "+
+                    player1.getName() +
+                    " | " +
+                    System.identityHashCode(player1)
+                );*/
+                System.out.println("\n\n~~~~~~~~~~ "+player1.getName()+ "'s Turn! ~~~~~~~~~~\n\n");
                 playerTurn(player1);
-                player1.checkBroke();
-                player2.checkBroke();
-                player3.checkBroke();
-                player4.checkBroke();
+                if(player1.checkBroke()){
+                    System.out.println("You're broke! Game over!");
+                }
+                if(player2.checkBroke()){
+                    playersBroke = 1;
+                    if(player3.checkBroke()){
+                        playersBroke = 2;
+                        if(player4.checkBroke()){
+                            playersBroke = 3;
+                        }
+                    }
+                }
             }
-            if(!player2.checkBroke()==true){
+                /*for(char c : player1.getName().toCharArray()){
+                    System.out.println((int)c);
+                }*/
+            //System.out.println(player1.getName());
+            if(!player2.checkBroke()){
+                System.out.println("\n\n~~~~~~~~~~ "+player2.getName()+ "'s Turn! ~~~~~~~~~~\n\n");
                 playerTurn(player2);
-                player1.checkBroke();
-                player2.checkBroke();
-                player3.checkBroke();
-                player4.checkBroke();
+                if(player2.checkBroke()){
+                    System.out.println("You're broke! Game over!");
+                }
+                if(player1.checkBroke()){
+                    playersBroke = 1;
+                    if(player3.checkBroke()){
+                        playersBroke = 2;
+                        if(player4.checkBroke()){
+                            playersBroke = 3;
+                        }
+                    }
+                }
             }
-            if(!player3.checkBroke()==true){
+            if(!player3.checkBroke()){
+                System.out.println("\n\n~~~~~~~~~~ "+player3.getName()+ "'s Turn! ~~~~~~~~~~\n\n");
                 playerTurn(player3);
-                player1.checkBroke();
-                player2.checkBroke();
-                player3.checkBroke();
-                player4.checkBroke();
+                if(player3.checkBroke()){
+                    System.out.println("You're broke! Game over!");
+                }
+                if(player1.checkBroke()){
+                    playersBroke = 1;
+                    if(player2.checkBroke()){
+                        playersBroke = 2;
+                        if(player4.checkBroke()){
+                            playersBroke = 3;
+                        }
+                    }
+                }
             }
-            if(!player4.checkBroke()==true){
+            if(!player4.checkBroke()){
+                System.out.println("\n\n~~~~~~~~~~ "+player4.getName()+ "'s Turn! ~~~~~~~~~~\n\n");
                 playerTurn(player4);
-                player1.checkBroke();
-                player2.checkBroke();
-                player3.checkBroke();
-                player4.checkBroke();
+                if(player4.checkBroke()){
+                    System.out.println("You're broke! Game over!");
+                }
+                if(player1.checkBroke()){
+                    playersBroke = 1;
+                    if(player2.checkBroke()){
+                        playersBroke = 2;
+                        if(player3.checkBroke()){
+                            playersBroke = 3;
+                        }
+                    }
+                }
+            }
+            System.out.println("\n\n___________Round "+totalTurns+" end!___________\n\n");
+            totalTurns++;
+            if(playersBroke == 3){
+                if(!player1.checkBroke()){
+                    System.out.println("Congrats! "+player1.getName()+" wins!");
+                }else if(!player2.checkBroke()){
+                    System.out.println("Congrats! "+player2.getName()+" wins!");
+                }else if(!player3.checkBroke()){
+                    System.out.println("Congrats! "+player3.getName()+" wins!");
+                }else if(!player4.checkBroke()){
+                    System.out.println("Congrats! "+player4.getName()+" wins!");
+                }
             }
         }
     }
     
     public void playerTurn(Player player){
-        System.out.println(player.getName() + "'s Turn!");
         if(player.getJailed() == 0){
-            player.roll();
-            checkSpace(player);
+            player.roll(this);
         }else{
-         player.rollJail();
+         player.rollJail(this);
         }
+        System.out.println("\n\n~~~~~~~~~~ Turn end! ~~~~~~~~~~\n\n");
     }
     
     public void checkSpace(Player player){
@@ -230,27 +378,15 @@ class Game {
                 checkProp(player, this.propertyList.get(0));
             }
             case 2 ->{
-                switch(player.getNumber()){
-                    case 1 ->{
-                        chestDeck.get(0).playCard(this, player);
-                        
-                    }
-                    case 2 ->{
-                        
-                    }
-                    case 3 ->{
-                        
-                    }
-                    case 4 ->{
-                        
-                    }
-                }
+                System.out.println("You landed on: Community Chest! What will it be?");
+                playChest(player);
             }
             case 3 ->{
                 checkProp(player, this.propertyList.get(1));
             }
             case 4 ->{
-                System.out.println("You landed on: GO!");
+                System.out.println("You landed on: Income Tax! Pay up $200!");
+                player.changeCash(-200);
             }
             case 5 ->{
                 checkProp(player, this.propertyList.get(22));
@@ -259,7 +395,8 @@ class Game {
                 checkProp(player, this.propertyList.get(2));
             }
             case 7 ->{
-                System.out.println("You landed on: GO!");
+                System.out.println("You landed on: Chance! Test your luck!");
+                playChance(player);
             }
             case 8 ->{
                 checkProp(player, this.propertyList.get(3));          
@@ -268,7 +405,7 @@ class Game {
                 checkProp(player, this.propertyList.get(4));          
             }
             case 10 ->{
-                System.out.println("You landed on: GO!");
+                System.out.println("You landed on: Just Visiting! Hello, suckers!");
             }
             case 11 ->{
                 checkProp(player, this.propertyList.get(5));           
@@ -289,7 +426,8 @@ class Game {
                 checkProp(player, this.propertyList.get(8));          
             }
             case 17 ->{
-                System.out.println("You landed on: GO!");
+                System.out.println("You landed on: Community Chest! What will it be?");
+                playChest(player);
             }
             case 18 ->{
                 checkProp(player, this.propertyList.get(9));         
@@ -304,7 +442,8 @@ class Game {
                 checkProp(player, this.propertyList.get(11));        
             }
             case 22 ->{
-                System.out.println("You landed on: GO!");
+                System.out.println("You landed on: Chance! Test your luck!");
+                playChance(player);
             }
             case 23 ->{
                 checkProp(player, this.propertyList.get(12));           
@@ -330,6 +469,7 @@ class Game {
             case 30 ->{
                 System.out.println("You landed on: Go to Jail! Aw, rats!");
                 player.setJailed(3);
+                player.setSpace(10);
             }
             case 31 ->{
                 checkProp(player, this.propertyList.get(17));         
@@ -338,7 +478,8 @@ class Game {
                 checkProp(player, this.propertyList.get(18));        
             }
             case 33 ->{
-                System.out.println("You landed on: GO!");
+                System.out.println("You landed on: Community Chest! What will it be?");
+                playChest(player);
             }
             case 34 ->{
                 checkProp(player, this.propertyList.get(19));
@@ -347,31 +488,42 @@ class Game {
                 checkProp(player, this.propertyList.get(25));        
             }
             case 36 ->{
-                System.out.println("You landed on: GO!");
+                System.out.println("You landed on: Chance! Test your luck!");
+                playChance(player);
             }
             case 37 ->{
                 checkProp(player, this.propertyList.get(20));      
             }
             case 38 ->{
-                System.out.println("You landed on: GO!");
+                System.out.println("You landed on: Luxury Tax! Pay up $100!");
+                player.changeCash(-100);
             }
             case 39 ->{
                 checkProp(player, this.propertyList.get(21));      
             }
         }
-        //  - UNOWNED PROPERTY -
-        //   Ask player to buy
-        //  - IF BOUGHT -
-        //   Subtract cash from player, add property to playerProps
-        //   Original property has owned set to true, and whoOwns set to playerNumber
-        //  - IF NOT BOUGHT -
     }
     
     public void playChest(Player player){
         chestDeck.get(0).playCard(this, player);
         chestUsed.add(chestDeck.get(0));
         chestDeck.remove(0);
-            
+        if(chestDeck.isEmpty()){
+            System.out.println("Chest deck empty! Reshuffling...");
+            chestDeck = chestUsed;
+            Collections.shuffle(chestDeck);
+        }
+    }
+    
+    public void playChance(Player player){
+        chanceDeck.get(0).playCard(this, player);
+        chanceUsed.add(chanceDeck.get(0));
+        chanceDeck.remove(0);
+        if(chanceDeck.isEmpty()){
+            System.out.println("Chance deck empty! Reshuffling...");
+            chanceDeck = chanceUsed;
+            Collections.shuffle(chanceDeck);
+        }
     }
     
     public void buyProperty(Player player, Property property){
@@ -383,11 +535,22 @@ class Game {
             System.out.println("Would you like to purchase this property? You have $" + player.getCash());
             System.out.println(property.getName() + " costs $" + property.getCost());
             System.out.println("Input 'y' or 'n' to make your choice.");
-            if(scan.next().equals("y")){
-                //TODO
-            }else if(scan.next().equals("n")){
-                
+            boolean rollLoop = true;
+            while(rollLoop){
+                String temp = scan.next();
+                if(temp.equals("y")){
+                    rollLoop = false;
+                    System.out.println("Cha-Ching! " + property.getName() + " sold to " + player.getName() + "!");
+                    player.changeCash(-property.getCost());
+                    player.addProps(property.getPosition(), propertyList);
+                    System.out.println("Your total cash: " + player.getCash());
+                    System.out.println("Your total properties:\n" + player.getProps());
+                }else if(temp.equals("n")){
+                    rollLoop = false;
+                    System.out.println("Just perusing the plot...");
+                }
             }
+            
         }
     }
     
@@ -445,7 +608,9 @@ class Player {
     private boolean jailFree;
     private int playerJailed;
     private boolean playerBroke;
+    //Unimplemented
     private boolean computerPlayer;
+    
     private int currentSpace;
     private int playerNumber;
     
@@ -463,75 +628,135 @@ class Player {
     //Scanner
     Scanner scan = new Scanner(System.in);
     
-    public void roll(){
+    public void roll(Game game){
         System.out.println("Input 'y' to roll dice when ready!");
-        if(scan.next().equals("y")){
-            Die d1 = new Die();
-            Die d2 = new Die();
-            boolean doublesTrue = false;
-            int doublesCounter = 0;
-            do{
-
-                int d1Roll = d1.roll();
-                int d2Roll = d2.roll();
-                int total = d1Roll + d2Roll;
-                doublesTrue = (d1Roll == d2Roll);
-                if(doublesTrue == true){
-                    doublesCounter++;
-                }
-                if(doublesCounter < 3){
-                    for(int i = 0; i < 39; i++){
-                        if(this.getSpace() == 39){
-                            this.setSpace(0);
-                            this.changeCash(200);
-                            System.out.println("""
-                                               You passed Go! Collect $200.
-                                               Total cash: $"""+this.getCash());
-                        }else if(this.getSpace() < 39){
-                            this.setSpace(this.getSpace() + 1);
-                        }
+        boolean rollLoop = true;
+        while(rollLoop){
+            String temp = scan.next();
+            if(temp.equals("y")){
+                rollLoop = false;
+                Die d1 = new Die();
+                Die d2 = new Die();
+                boolean doublesTrue = false;
+                int doublesCounter = 0;
+                do{
+                    System.out.println("\nRolling...");
+                    int d1Roll = d1.roll();
+                    int d2Roll = d2.roll();
+                    int total = d1Roll + d2Roll;
+                    System.out.println("You rolled: "+d1Roll+" and "+d2Roll+", totalling to "+total+"!\n");
+                    doublesTrue = (d1Roll == d2Roll);
+                    if((doublesTrue == true) && (doublesCounter < 3)){
+                        System.out.println("\nThat's doubles! Go again!");
+                        doublesCounter++;
                     }
-                }else if(doublesCounter == 3){
-                    this.setJailed(3);
-                }
-            }while(doublesTrue == true);
+                    if(doublesCounter < 3){
+                        for(int i = 0; i < total; i++){
+                            if(this.getSpace() == 39){
+                                this.setSpace(0);
+                                this.changeCash(200);
+                                System.out.println("""
+                                                   
+                                                   You passed Go! Collect $200.
+                                                   Total cash: $"""+this.getCash()+"\n");
+                            }else if(this.getSpace() < 39){
+                                this.setSpace(this.getSpace() + 1);
+                            }
+                        }
+                        game.checkSpace(this);
+                    }else if(doublesCounter == 3){
+                        System.out.println("\nThat's three!!! Go to jail, sucker!!!");
+                        this.setJailed(3);
+                        this.setSpace(10);
+                    }
+                }while(doublesTrue == true);
+            }
         }
     }
     
-    public void rollJail(){
+    public void rollJail(Game game){
+        System.out.println("You are jailed. Womp womp!");
+        
         if(this.checkJailFree()){
-            //Ask to use JailFree
+            System.out.println("\nYou have a Get Out of Jail Free card.\nWould you like to use it?");
+            System.out.println("Input 'y' or 'n' to make your choice.");
+            boolean rollLoop = true;
+            while(rollLoop){
+                String temp = scan.next();
+                if(temp.equals("y")){
+                    rollLoop = false;
+                    System.out.println("\nInstant freedom!!! Take your turn as normal.");
+                    this.setJailed(0);
+                    this.setJailFree(false);
+                    this.roll(game);
+                }else if(temp.equals("n")){
+                    rollLoop = false;
+                    System.out.println("\nSaving it for later...");
+                }
+            }
+            
         }else if(this.getCash() > 50){
-            //Ask to pay $50
+            System.out.println("Would you like to pay $50 to get out now?");
+            System.out.println("You currently have $"+this.getCash()+".");
+            System.out.println("Input 'y' or 'n' to make your choice.");
+            boolean rollLoop = true;
+            while(rollLoop){
+                String temp = scan.next();
+                if(temp.equals("y")){
+                    rollLoop = false;
+                    System.out.println("Instant freedom!!! Take your turn as normal.");
+                    this.setJailed(0);
+                    this.changeCash(-50);
+                    System.out.println("You now have $"+this.getCash()+".");
+                    this.roll(game);
+                }else if(temp.equals("n")){
+                    rollLoop = false;
+                    System.out.println("Nope, you feel lucky today!!!");
+                }
+            }
         }
         
-        
-        System.out.println("""
-                           You are jailed. 
-                           Input 'y' to roll dice when ready!""");
-        if(scan.next().equals("y")){
+        if((this.getJailed() == 0) && (this.getSpace() == 10)){
+            System.out.println(""" 
+                               Input 'y' to roll dice when ready!""");
+            boolean rollLoop = true;
+            while(rollLoop){
+                String temp = scan.next();
+                if(temp.equals("y")){
+                    rollLoop = false;
+                    System.out.println("Rolling...");
+                    Die d1 = new Die();
+                    Die d2 = new Die();
+                    int d1Roll = d1.roll();
+                    int d2Roll = d2.roll();
+                    System.out.println("You rolled: "+d1Roll+" and "+d2Roll+"!");
+                    if(d1Roll == d2Roll){
+                        System.out.println("Doubles!!! You're free!!!");
+                        this.setJailed(0);
 
-            Die d1 = new Die();
-            Die d2 = new Die();
-            int d1Roll = d1.roll();
-            int d2Roll = d2.roll();
-            if(d1Roll == d2Roll){
-                this.setJailed(0);
-
-            } else if(this.getJailed() > 1){
-                this.setJailed(playerJailed - 1);
-            }
-            if(this.getJailed() == 0){
-                int total = d1Roll + d2Roll;
-                for(int i = 0; i < 39; i++){
-                    if(this.getSpace() == 39){
-                        this.setSpace(0);
-                        this.changeCash(200);
-                        System.out.println("""
-                                           You passed Go! Collect $200.
-                                           Total cash: $"""+this.getCash());
-                    }else if(this.getSpace() < 39){
-                        this.setSpace(this.getSpace() + 1);
+                    } else if(this.getJailed() > 1){
+                        System.out.println("Aw rats, we'll get 'em next time...");
+                        this.setJailed(playerJailed - 1);
+                    } else if(this.getJailed() == 1){
+                        System.out.println("That was your last shot... Pay $50 and be free!");
+                        this.changeCash(-50);
+                        System.out.println("You currently have $"+this.getCash()+".");
+                    }
+                    if((this.getJailed() == 0) && (this.getSpace() == 10)){
+                        int total = d1Roll + d2Roll;
+                        System.out.println("You move "+total+" spaces.");
+                        for(int i = 0; i < total; i++){
+                            if(this.getSpace() == 39){
+                                this.setSpace(0);
+                                this.changeCash(200);
+                                System.out.println("""
+                                                   You passed Go! Collect $200.
+                                                   Total cash: $"""+this.getCash());
+                            }else if(this.getSpace() < 39){
+                                this.setSpace(this.getSpace() + 1);
+                            }
+                        }
+                        game.checkSpace(this);
                     }
                 }
             }
@@ -539,63 +764,84 @@ class Player {
     }
     
     public String getName(){
-        return this.playerName;
+        return playerName;
     }
     
     public int getCash(){
-        return this.playerCash;
+        return playerCash;
     }
     
     public int getJailed(){
-        return this.playerJailed;
+        return playerJailed;
     }
     
     public int getSpace(){
-        return this.currentSpace;
+        return currentSpace;
     }
     
     public int getNumber(){
-        return this.playerNumber;
+        return playerNumber;
     }
     
     public boolean checkBroke(){
         if(this.getCash() <= 0){
-            this.playerBroke = true;
+            playerBroke = true;
         }
-        return this.playerBroke;
+        return playerBroke;
     }
     
     public boolean checkJailFree(){
-        return this.jailFree;
+        return jailFree;
     }
     
     public boolean checkComputer(){
-        return this.computerPlayer;
+        return computerPlayer;
     }
     
     public ArrayList<Property> getProps(){
-        return this.playerProps;
+        return playerProps;
     }
     
     public void setSpace(int space){
-        this.currentSpace = space;
+        currentSpace = space;
     }
     public void setJailed(int turns){
-        this.playerJailed = turns;
+        playerJailed = turns;
     }
     
     public void setJailFree(boolean TOrF){
-        this.jailFree = TOrF;
+        jailFree = TOrF;
     }
     
     public void changeCash(int cash){
-        this.playerCash = this.playerCash + cash;
+        playerCash = playerCash + cash;
     }
     
-    public void addProps(int propertySpace){
-        //Search for property in propertyList via position
-        //Add copy of property to player's PropertyList
-        //Print confirmation message
+    public void addProps(int propertySpace, ArrayList<Property> propList){
+        for(Property p : propList){
+            if(p.getPosition() == propertySpace){
+                playerProps.add(p);
+                p.setOwned(true);
+                p.setWhoOwns(getNumber());
+            }
+        }
+        for(int i = 0; i < playerProps.size() - 1; i++){
+            int position1 = propList.indexOf(playerProps.get(i));
+            int position2 = propList.indexOf(playerProps.get(i + 1));
+            if(position1 > position2){
+                Property temp = playerProps.get(i + 1);
+                playerProps.remove(i + 1);
+                playerProps.add(i + 1, playerProps.get(i));
+                playerProps.remove(i);
+                playerProps.add(i, temp);
+            }
+        }
+    }
+    
+    @Override
+    public String toString() {
+        String returnString = this.getName();
+        return returnString;
     }
 }
 
@@ -641,6 +887,8 @@ class Property {
     public int calculateRent(Player owner){
         int finalRent = 0;
         int setCounter = 0;
+        //Scanner
+        Scanner scan = new Scanner(System.in);
         if(this.checkMortgaged() == false){
             finalRent = this.getRent();
             ArrayList<Property> tempProps = owner.getProps();
@@ -665,22 +913,34 @@ class Property {
                             setCounter++;
                         }
                     }
-                    Die d1 = new Die();
-                    Die d2 = new Die();
-                    int roll1, roll2;
-                    // Wait for player prompt
-                    roll1 = d1.roll();
-                    roll2 = d2.roll();
-                    int initialRoll = roll1 + roll2;
-                    int finalRoll;
-                    switch(setCounter){
-                        case 1 -> {
-                            finalRoll = initialRoll * 4;
-                            finalRent = finalRoll;
-                        }
-                        case 2 -> {
-                            finalRoll = initialRoll * 10;
-                            finalRent = finalRoll;
+                    System.out.println(""" 
+                               Input 'y' to roll dice when ready!""");
+                    boolean rollLoop = true;
+                    while(rollLoop){
+                        String temp = scan.next();
+                        if(temp.equals("y")){
+                            rollLoop = false;
+                            System.out.println("Rolling...");
+                            Die d1 = new Die();
+                            Die d2 = new Die();
+                            int roll1, roll2;
+                            // Wait for player prompt
+                            roll1 = d1.roll();
+                            roll2 = d2.roll();
+                            int initialRoll = roll1 + roll2;
+                            int finalRoll;
+                            switch(setCounter){
+                                case 1 -> {
+                                    finalRoll = initialRoll * 4;
+                                    finalRent = finalRoll;
+                                }
+                                case 2 -> {
+                                    finalRoll = initialRoll * 10;
+                                    finalRent = finalRoll;
+                                }
+                            }
+                            System.out.println("You rolled: "+roll1+" and "+roll2+",\n"
+                                    + "adding and multiplying to "+finalRent+"!");
                         }
                     }
                 }
@@ -807,6 +1067,14 @@ class Property {
     
     public boolean checkSet(){
         return this.completeSet;
+    }
+    
+    public void setOwned(boolean TorF){
+        owned = TorF;
+    }
+    
+    public void setWhoOwns(int owner){
+        whoOwns = owner;
     }
     
     @Override
@@ -1150,8 +1418,6 @@ class Chance{
 
 /*
 TODO:
- - buyProperties() method
  - Finish Game class
     - Specifically, finish run() method
- - Add player names
 */
