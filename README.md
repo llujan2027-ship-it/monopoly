@@ -1,7 +1,7 @@
 # monopoly
 APCSA U10 Project
 
-DOWNLOAD ALL FILES. MONOPOLY WILL NOT WORK WITHOUT ALL FILES, ESPECIALLY ALL FILES IN THE "Decks" FOLDER.
+DOWNLOAD ALL FILES. MONOPOLY WILL NOT WORK WITHOUT ALL FILES, ESPECIALLY ALL FILES IN THE "Decks" AND "sounds" FOLDERS AND ALL THE OTHER FOLDERS TOO.
 
 Please note that due to programming and braincell limitations, there will not be trading or auctioning implemented.
 Monopoly can be played just as fine with just as bad of a headache without either.
