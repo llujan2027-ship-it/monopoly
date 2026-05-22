@@ -80,8 +80,9 @@ public class Monopoly {
         boolean p4Participating = false;
         ArrayList<String> pieceList = new ArrayList<>(Arrays.asList("Dog", "Cat", "Car", "Top Hat", "Duck", "Penguin", "Battleship", "T-Rex"));
         do{
-            switch(scan.nextInt()){
-                case 2 ->{
+            String pNum = scan.next();
+            switch(pNum){
+                case "2" ->{
                     System.out.println("""
                                        
                                        You have selected: 2 players!
@@ -90,7 +91,7 @@ public class Monopoly {
                     playerChoice = 2;
                     choiceFail = false;
                 }
-                case 3 ->{
+                case "3" ->{
                     System.out.println("""
                                        
                                        You have selected: 3 players!
@@ -100,7 +101,7 @@ public class Monopoly {
                     p3Participating = true;
                     choiceFail = false;
                 }
-                case 4 ->{
+                case "4" ->{
                     System.out.println("""
                                        
                                        You have selected: 4 players!
@@ -145,7 +146,7 @@ public class Monopoly {
                                         p1Piece = s;
                                         pieceList.remove(s);
                                         choiceFail = false;
-                                        System.out.println("\nYour piece is: the" + p1Piece + "!\n");
+                                        System.out.println("\nYour piece is: the " + p1Piece + "!\n");
                                         break;
                                     }
                                 }
@@ -177,10 +178,10 @@ public class Monopoly {
                                 for(String s : pieceList){
                                     if(s.equalsIgnoreCase(p2Piece)){
                                         pieceFound = true;
-                                        p1Piece = s;
+                                        p2Piece = s;
                                         pieceList.remove(s);
                                         choiceFail = false;
-                                        System.out.println("\nYour piece is: the" + p2Piece + "!\n");
+                                        System.out.println("\nYour piece is: the " + p2Piece + "!\n");
                                         break;
                                     }
                                 }
@@ -212,10 +213,10 @@ public class Monopoly {
                                 for(String s : pieceList){
                                     if(s.equalsIgnoreCase(p3Piece)){
                                         pieceFound = true;
-                                        p1Piece = s;
+                                        p3Piece = s;
                                         pieceList.remove(s);
                                         choiceFail = false;
-                                        System.out.println("\nYour piece is: the" + p3Piece + "!\n");
+                                        System.out.println("\nYour piece is: the " + p3Piece + "!\n");
                                         break;
                                     }
                                 }
@@ -247,10 +248,10 @@ public class Monopoly {
                                 for(String s : pieceList){
                                     if(s.equalsIgnoreCase(p4Piece)){
                                         pieceFound = true;
-                                        p1Piece = s;
+                                        p4Piece = s;
                                         pieceList.remove(s);
                                         choiceFail = false;
-                                        System.out.println("\nYour piece is: the" + p4Piece + "!\n");
+                                        System.out.println("\nYour piece is: the " + p4Piece + "!\n");
                                         break;
                                     }
                                 }
@@ -460,8 +461,8 @@ class Game {
     
     public void checkSpace(Player player){
         int playerSpace = player.getSpace();
-        SoundClass chance = new SoundClass("\sounds\\effects\\monopoly_chance.wav\"");
-        SoundClass chest = new SoundClass("\sounds\\effects\\monopoly_chest.wav\"");
+        SoundClass chance = new SoundClass("/monopoly/sounds/effects/monopoly_chance.wav");
+        SoundClass chest = new SoundClass("/monopoly/sounds/effects/monopoly_chest.wav");
         switch(playerSpace){
             case 0 ->{
                 System.out.println("You landed on: GO! Enjoy your $200!");
@@ -733,7 +734,7 @@ class Player {
     Scanner scan = new Scanner(System.in);
     
     public void roll(Game game){
-        SoundClass dice = new SoundClass("\sounds\\effects\\monopoly_dice.wav\"");
+        SoundClass dice = new SoundClass("/monopoly/sounds/effects/monopoly_dice.wav");
         boolean doublesTrue = false;
         do{
             System.out.println("Input 'y' to roll dice when ready!");
@@ -788,7 +789,7 @@ class Player {
     
     public void rollJail(Game game){
         System.out.println("You are jailed. Womp womp!");
-        SoundClass dice = new SoundClass("\sounds\\effects\\monopoly_dice.wav\"");
+        SoundClass dice = new SoundClass("/monopoly/sounds/effects/monopoly_dice.wav");
         
         if(this.checkJailFree()){
             System.out.println("\nYou have a Get Out of Jail Free card.\nWould you like to use it?");
@@ -879,14 +880,14 @@ class Player {
     }
     
     public void playPieceSound(){
-        SoundClass dog = new SoundClass("\sounds\\effects\\monopoly_dog.wav\"");
-        SoundClass cat = new SoundClass("\sounds\\effects\\monopoly_cat.wav\"");
-        SoundClass ducky = new SoundClass("\sounds\\effects\\monopoly_duck.wav\"");
-        SoundClass pingu = new SoundClass("\sounds\\effects\\monopoly_penguin.wav\"");
-        SoundClass car = new SoundClass("\sounds\\effects\\monopoly_car.wav\"");
-        SoundClass rawr = new SoundClass("\sounds\\effects\\monopoly_trex.wav\"");
-        SoundClass hat = new SoundClass("\sounds\\effects\\monopoly_tophat.wav\"");
-        SoundClass boat = new SoundClass("\sounds\\effects\\monopoly_battleship.wav\"");
+        SoundClass dog = new SoundClass("/monopoly/sounds/pieces/monopoly_dog.wav");
+        SoundClass cat = new SoundClass("/monopoly/sounds/pieces/monopoly_cat.wav");
+        SoundClass ducky = new SoundClass("/monopoly/sounds/pieces/monopoly_duck.wav");
+        SoundClass pingu = new SoundClass("/monopoly/sounds/pieces/monopoly_penguin.wav");
+        SoundClass car = new SoundClass("/monopoly/sounds/pieces/monopoly_car.wav");
+        SoundClass rawr = new SoundClass("/monopoly/sounds/pieces/monopoly_trex.wav");
+        SoundClass hat = new SoundClass("/monopoly/sounds/pieces/monopoly_tophat.wav");
+        SoundClass boat = new SoundClass("/monopoly/sounds/pieces/monopoly_battleship.wav");
         switch(playerPiece){
             case "Dog" ->{
                 dog.createTimeForSound();
@@ -970,7 +971,7 @@ class Player {
     }
     
     public void changeCash(int cash){
-        SoundClass gain = new SoundClass("\sounds\\effects\\monopoly_cash_gain.wav\"");
+        SoundClass gain = new SoundClass("/monopoly/sounds/effects/monopoly_cash_gain.wav");
         playerCash = playerCash + cash;
         if(cash > 0){
             gain.createTimeForSound();
@@ -1304,7 +1305,7 @@ class CommunityChest{
         System.out.println(this.getText());
         switch(this.getEffect()){
             case "none" -> {
-                SoundClass lose = new SoundClass("\sounds\\effects\\monopoly_cash_lose.wav\"");
+                SoundClass lose = new SoundClass("/monopoly/sounds/effects/monopoly_cash_loss.wav");
                 if(getCashDiff() < 0){
                     lose.createTimeForSound();
                 }
@@ -1611,10 +1612,13 @@ class SoundClass{
     }
     
     //syntax for playing sounds - do not change this!
-    public static void playSound(String filePath) {
+    public void playSound(String filePath) {
         try {
             File soundFile = new File(filePath);
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+            AudioInputStream audioIn =
+                AudioSystem.getAudioInputStream(
+                    getClass().getResource(filePath)
+                );
             Clip clip = AudioSystem.getClip();
             clip.open(audioIn);
             clip.setFramePosition(0);
@@ -1625,7 +1629,11 @@ class SoundClass{
             clip.addLineListener(event -> {
                 if (event.getType() == LineEvent.Type.STOP) {
                     clip.close();
-            //        System.exit(0);
+                    try {
+                        audioIn.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
@@ -1634,17 +1642,18 @@ class SoundClass{
     }
     //you must create some time for the sound, or it will be played in 0 seconds
     public void createTimeForSound() {
+        Timer timer = new Timer();
         TimerTask task = new TimerTask() {
+            @Override
             public void run() {
                 playSound(filePath);
                 //System.out.println("Task performed on: " + new Date() + "n" +
                 //  "Thread's name: " + Thread.currentThread().getName());
-
+                timer.cancel();
             }
         };
-        Timer timer = new Timer("Timer");
         //Time in milliseconds
-        long delay = 2000L;
+        long delay = 1000L;
         timer.schedule(task, delay);
     }
 }
