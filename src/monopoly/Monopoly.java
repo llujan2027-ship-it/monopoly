@@ -1316,6 +1316,8 @@ class CommunityChest{
                 drawing.setJailFree(true);
             }
             case "PerPlayer" -> {
+                SoundClass lose = new SoundClass("/monopoly/sounds/effects/monopoly_cash_loss.wav");
+                lose.createTimeForSound();
                 int othersPay = -this.getCashDiff();
                 for(int i = 1; i <= 4; i++){
                     switch(i){
@@ -1348,6 +1350,8 @@ class CommunityChest{
                 System.out.println("Total cash: $"+drawing.getCash());
             }
             case "Repairs" ->{
+                SoundClass lose = new SoundClass("/monopoly/sounds/effects/monopoly_cash_loss.wav");
+                lose.createTimeForSound();
                 ArrayList<Property> tempArray = drawing.getProps();
                 int totalHouses = 0;
                 int totalHotels = 0;
@@ -1367,6 +1371,8 @@ class CommunityChest{
                         + "\nTotal cash: $" + drawing.getCash());
             }
             case "Jail" -> {
+                SoundClass lose = new SoundClass("/monopoly/sounds/effects/monopoly_cash_loss.wav");
+                lose.createTimeForSound();
                 drawing.setSpace(10);
                 drawing.setJailed(3);
             }
